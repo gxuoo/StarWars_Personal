@@ -114,6 +114,8 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 		case ObjectType::WALL:
 			Print("W");
 			break;
+		default:
+			Print("B");
 		}
 	}
 }

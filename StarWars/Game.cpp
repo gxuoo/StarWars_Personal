@@ -6,6 +6,7 @@
 Game::Game(bool gameOver) :gameOver(gameOver)
 {
 	this->objects = std::vector<Object*>();
+	this->current_step = 0;
 }
 
 bool Game::IsGameOver()
@@ -23,38 +24,27 @@ std::vector<Object*>& Game::GetObjects()
 	return this->objects;
 }
 
+void Game::UpdateObjectNextPosition()
+{
+	if (current_step == 1000)
+		current_step -= 1000;
+
+	for (std::vector<Object*>::iterator it = objects.begin(); it < objects.end(); ++it)
+		if(current_step % (1000 / (*it)->GetSpeed()) == 0)
+			(*it)->SetNextCoord((*it)->GetCoord() + (*it)->GetVelocity());
+
+	current_step += 1;
+}
+
 void Game::UpdateObjects()
 {
-	for (std::vector<Object*>::iterator it = objects.begin(); it < objects.end(); ++it)
-	{
-		if((*it)->IsCharacter() && (*it)->GetVelocity().getY() < 0)
-		{
-			if(((Character*)(*it))->getJumpTimer() < ((Character*)(*it))->getJumpLimit()) 
-			{
-				((Character*)(*it))->setJumpTimer(((Character*)(*it))->getJumpTimer() + 1);
-			}
-			else
-			{
-				((Character*)(*it))->setJumpTimer(0);
-				(*it)->SetVelocity({ (*it)->GetVelocity().getX(), 1 });
-			}
-		}
-
-		(*it)->SetNextCoord((*it)->GetCoord() + (*it)->GetVelocity());
-	}
+	UpdateObjectNextPosition();
 
 	for (std::vector<Object *>::iterator it = objects.begin(); it < objects.end(); ++it)
 	{
-		bool isCharacterFalling = true;
-		if (!(*it)->IsCharacter() || (*it)->GetVelocity().getY() < 0)
-		{
-			isCharacterFalling = false;
-		}
-
-		
 		for (std::vector<Object*>::iterator it2 = objects.begin(); it2 < objects.end(); ++it2)
 		{
-			if (it != it2 && (*it)->IsCollisionWith(*(*it2)))
+			if (it != it2 && (*it)->IsCollisionWith((*it2)))
 			{
 				if ((*it)->IsCharacter() && (*it2)->getObjectType() == ObjectType::WALL)
 				{
@@ -86,17 +76,6 @@ void Game::UpdateObjects()
 					break;
 				}
 			}
-			
-			if (isCharacterFalling == true && (*it2)->getObjectType() == ObjectType::WALL && (*it)->GetNextCoord() + Vec2(0, 1) == (*it2)->GetNextCoord())
-			{
-				isCharacterFalling = false;
-				(*it)->SetVelocity({ (*it)->GetVelocity().getX(), 0 });
-			}
-
-		}
-		if (isCharacterFalling)
-		{
-			(*it)->SetVelocity({ (*it)->GetVelocity().getX(), 1 });
 		}
 	}
 

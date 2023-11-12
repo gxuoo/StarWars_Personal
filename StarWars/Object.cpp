@@ -1,10 +1,10 @@
 #include "Object.h"
 
-Object::Object() : Object(false, { 0, 0 }, {0, 0})
+Object::Object() : Object(false, { 0, 0 }, { 0, 0 }, { 0,0 }, 1)
 {
 }
 
-Object::Object(bool isFixed, Vec2 coord, Vec2 size) : isFixed(isFixed), coord(coord), size(size)
+Object::Object(bool isFixed, Vec2 coord, Vec2 size, Vec2 velocity, int speed) : isFixed(isFixed), coord(coord), size(size), velocity(velocity), speed(speed)
 {
 	velocity = 0;
 	nextCoord = coord;
@@ -83,7 +83,8 @@ bool Object::IsItem()
 	return false;
 }
 
-int Object::GetCollisionPriority() {//오브젝트의 Type에 따라 우선순위를 반환함. 우선순위가 1 에 가까울수록 우선순위가 높음.
+int Object::GetCollisionPriority() 
+{
 	if (this->object_type == ObjectType::WALL)
 	{
 		return 1;
@@ -111,19 +112,17 @@ int Object::GetCollisionPriority() {//오브젝트의 Type에 따라 우선순위를 반환함. 
 
 }
 
-bool Object::IsCollisionWith(const Object& obj) 
+bool Object::IsCollisionWith(const Object* obj)
 {
 	Vec2 object1_size = this->size;
-	Vec2 object2_size = obj.size;
+	Vec2 object2_size = obj->size;
 
 	for (int i = 0; i < object1_size.getX(); ++i)
 	{
 		for (int j = 0; j < object1_size.getY(); ++j)
 		{
-			if (this->nextCoord + Vec2{ i, j } == obj.nextCoord || this->coord + Vec2{ i, j } == obj.coord)
+			if (this->nextCoord + Vec2{ i, j } == obj->nextCoord || this->coord + Vec2{ i, j } == obj->coord)
 				return true;
-
-			return false;
 		}
 	}
 
@@ -131,11 +130,10 @@ bool Object::IsCollisionWith(const Object& obj)
 	{
 		for (int j = 0; j < object2_size.getY(); ++j)
 		{
-			if (this->nextCoord == obj.nextCoord + Vec2{ i, j } || this->coord == obj.coord + Vec2{ i, j })
+			if (this->nextCoord == obj->nextCoord + Vec2{ i, j } || this->coord == obj->coord + Vec2{ i, j })
 				return true;
 
-			return false;
-		}
+			}
 	}
 
 	return false;
