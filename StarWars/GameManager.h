@@ -15,7 +15,7 @@ public:
 	GameManager();
 	void StartGame();
 	bool PrecedeGame();
-	void GetPlayerKeyInput();
+	void GetPlayerKeyInput(PlayerCharacter*, PlayerCharacter*);
 private:
 	FrameManager frameManager;
 	Game* game;
