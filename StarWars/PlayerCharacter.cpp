@@ -4,6 +4,7 @@ PlayerCharacter::PlayerCharacter() : Character()
 {
 	object_type = ObjectType::PLAYER_CHARACTER;
 	jump_timer = 0;
+	is_mid_air = false;
 }
 
 void PlayerCharacter::setJumpTimer(const int time)
@@ -18,5 +19,5 @@ int PlayerCharacter::getJumpTimer()
 
 int PlayerCharacter::getJumpLimit()
 {
-	return 10;
+	return 5;
 }

@@ -22,8 +22,18 @@ void GameManager::MakePlayer()
 	player1->SetVelocity({ -1, 0 });
 	player2->SetVelocity({ 1, 0 });
 
-	player1->SetSpeed(10);
-	player2->SetSpeed(10);
+	player1->SetSpeed(20);
+	player2->SetSpeed(20);
+
+	for (int i = 0; i < 5; ++i)
+	{
+		Wall* wall = new Wall();
+
+		wall->SetCoord({ i + 10, 4 });
+		wall->SetNextCoord(wall->GetCoord());
+
+		game->GetObjects().push_back(wall);
+	}
 }
 
 void GameManager::MakeWall()
@@ -91,17 +101,17 @@ void GameManager::GetPlayerKeyInput()
 	PlayerCharacter* player1 = dynamic_cast<PlayerCharacter*>(game->GetObjects()[0]);
 	PlayerCharacter* player2 = dynamic_cast<PlayerCharacter*>(game->GetObjects()[1]);
 
-	if (GetAsyncKeyState(VK_LEFT))
+	if (GetAsyncKeyState(0x41))
 	{
 		player1->GetVelocity().setX(-1);
 	}
 
-	if (GetAsyncKeyState(VK_RIGHT))
+	if (GetAsyncKeyState(0x44))
 	{
 		player1->GetVelocity().setX(1);
 	}
 
-	else if (!GetAsyncKeyState(VK_LEFT) && !GetAsyncKeyState(VK_RIGHT))
+	else if (!GetAsyncKeyState(0x41) && !GetAsyncKeyState(0x44))
 	{
 		player1->GetVelocity().setX(0);
 	}
@@ -122,17 +132,17 @@ void GameManager::GetPlayerKeyInput()
 		game->GetObjects().push_back(p);
 	}
 
-	if (GetAsyncKeyState(0x41))
+	if (GetAsyncKeyState(VK_LEFT))
 	{
 		player2->GetVelocity().setX(-1);
 	}
 
-	if (GetAsyncKeyState(0x44))
+	if (GetAsyncKeyState(VK_RIGHT))
 	{
 		player2->GetVelocity().setX(1);
 	}
 
-	else if (!GetAsyncKeyState(0x41) && !GetAsyncKeyState(0x44))
+	else if (!GetAsyncKeyState(VK_LEFT) && !GetAsyncKeyState(VK_RIGHT))
 	{
 		player2->GetVelocity().setX(0);
 	}
@@ -145,12 +155,28 @@ void GameManager::GetPlayerKeyInput()
 	if (GetAsyncKeyState(0x57))
 	{
 		if (player1->GetVelocity().getY() == 0)
+		{
+			player1->setJumpTimer(0);
 			player1->GetVelocity().setY(1);
+		}
+	}
+
+	else if (!GetAsyncKeyState(0x57))
+	{
+		//player2->setJumpTimer(player2->getJumpTimer() + 2);
 	}
 
 	if (GetAsyncKeyState(VK_UP))
 	{
 		if (player2->GetVelocity().getY() == 0)
+		{
+			player2->setJumpTimer(0);
 			player2->GetVelocity().setY(1);
+		}
+	}
+
+	else if (!GetAsyncKeyState(VK_UP))
+	{
+		//player1->setJumpTimer(150);
 	}
 }

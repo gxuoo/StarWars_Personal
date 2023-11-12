@@ -137,5 +137,6 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 	}
 
 	SetCursorPosition({ 10, 10 });
-	Print(std::to_string(((PlayerCharacter*)objects[1])->getHealth()).c_str());
+	std::string str = std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getX()) + " " + std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getY());
+	Print(str.c_str());
 }

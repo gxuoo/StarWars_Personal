@@ -12,6 +12,7 @@ public:
 	void setJumpTimer(const int time);
 	int getJumpTimer();
 	int getJumpLimit();
+	bool is_mid_air;
 private:
 	int jump_timer;
 };

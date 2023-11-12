@@ -37,7 +37,7 @@ public:
 	bool IsCharacter();
 	bool IsItem();
 	int GetCollisionPriority();
-	long long lastupdated = 0;
+	long long last_updated = 0;
 
 protected:
 	bool isFixed;
