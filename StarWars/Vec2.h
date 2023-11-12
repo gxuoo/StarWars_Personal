@@ -24,6 +24,7 @@ public:
     Vec2& operator-=(const Vec2&);
     Vec2& operator*=(const Vec2&);
     Vec2& operator/=(const Vec2&);
+    void operator=(const Vec2&);
     bool operator==(const Vec2&) const;
     bool operator!=(const Vec2&) const;
     friend std::istream& operator>>(std::istream&, Vec2&);

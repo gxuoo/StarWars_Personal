@@ -11,22 +11,32 @@ void GameManager::StartGame()
 
 	PlayerCharacter* player1 = new PlayerCharacter();
 	PlayerCharacter* player2 = new PlayerCharacter();
-	
-	Wall* w = new Wall();
+
+	Particle* bullet1 = new Particle();
+	Particle* bullet2 = new Particle();
 
 	this->game->GetObjects().push_back(player1);
 	this->game->GetObjects().push_back(player2);
-	this->game->GetObjects().push_back(w);
+	this->game->GetObjects().push_back(bullet1);
+	this->game->GetObjects().push_back(bullet2);
 
-	player1->SetCoord({ 10, 1 });
-	player2->SetCoord({ 0, 6 });
-	w->SetCoord({ 0, 1 });
+	player1->SetCoord({ 10, 0 });
+	player2->SetCoord({ 25, 0 });
 
-	player1->SetVelocity({ -1, 0 });
-	player2->SetVelocity({ 0, -1 });
+	player1->SetVelocity({ 0, 0 });
+	player2->SetVelocity({ 0, 0 });
 
-	while (PrecedeGame()) {
-		Sleep(1000);
+	bullet1->SetCoord({ 15, 1 });
+	bullet2->SetCoord({ 15, 1 });
+
+	bullet1->SetSpeed(3);
+	bullet2->SetSpeed(1);
+
+	bullet1->SetVelocity({ 1, 0 });
+	bullet2->SetVelocity({ -1, 0 });
+
+	while (PrecedeGame()) 
+	{
 		this->GetPlayerKeyInput();
 		
 		this->frameManager.MakeFrame(this->game->GetObjects());
