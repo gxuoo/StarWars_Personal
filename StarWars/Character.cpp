@@ -5,6 +5,7 @@ Character::Character() : Object()
 	weapon_id = 0;
 	health = 100;
 	buff_timer = 0;
+	jump_timer = 0;
 	speed = 1;
 	object_type = ObjectType::CHARACTER;
 	size = { 1, 2 };
@@ -39,6 +40,22 @@ void Character::setBuffTimer(const int time)
 	buff_timer = time;
 }
 
-int  Character::getBuffTimer() {
+int  Character::getBuffTimer() 
+{
 	return buff_timer;
+}
+
+void Character::setJumpTimer(const int time) 
+{
+	jump_timer = time;
+}
+
+int Character::getJumpTimer() 
+{
+	return jump_timer;
+}
+
+int Character::getJumpLimit() 
+{
+	return JUMPLIMIT;
 }
