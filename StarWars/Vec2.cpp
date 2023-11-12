@@ -4,7 +4,7 @@ Vec2::Vec2(int v) : x(v), y(v) {}
 
 Vec2::Vec2(int x, int y) : x(x), y(y) {}
 
-Vec2::Vec2(const Vec2& o) : x(o.x), y(o.x) {}
+Vec2::Vec2(const Vec2& o) : x(o.x), y(o.y) {}
 
 Vec2 Vec2::operator+(const Vec2& rhs) const
 {
@@ -52,6 +52,12 @@ Vec2& Vec2::operator/=(const Vec2& rhs)
     this->x /= rhs.x;
     this->y /= rhs.y;
     return *this;
+}
+
+void Vec2::operator=(const Vec2& rhs)
+{
+    this->x = rhs.x;
+    this->y = rhs.y;
 }
 
 bool Vec2::operator==(const Vec2& rhs) const

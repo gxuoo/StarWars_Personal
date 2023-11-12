@@ -16,12 +16,17 @@ public:
 	int getWeapon();
 	void setBuffTimer(const int t);
 	int getBuffTimer();
+	void setJumpTimer(const int time);
+	int getJumpTimer();
+	int getJumpLimit();
 
 protected:
 	int speed;
 	int health;
 	int weapon_id;
 	int buff_timer;
+	int jump_timer;
+	const int JUMPLIMIT = 4;
 };
 
 #endif

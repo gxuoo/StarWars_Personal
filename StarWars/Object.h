@@ -20,7 +20,7 @@ enum class ObjectType {
 class Object {
 public:
 	Object();
-	Object(bool, Vec2, Vec2);
+	Object(bool, Vec2, Vec2, Vec2, int);
 	virtual ~Object() = default;
 	Vec2& GetCoord();
 	Vec2& GetVelocity();
@@ -32,7 +32,7 @@ public:
 	void SetDeleteObject(bool);
 	void SetCoord(const Vec2&);
 	void SetSpeed(int);
-	bool IsCollisionWith(const Object&);
+	bool IsCollisionWith(const Object*);
 	ObjectType getObjectType();
 	bool IsCharacter();
 	bool IsItem();
