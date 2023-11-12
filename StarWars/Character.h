@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Object.h"
+#include "DroppedWeapon.h"
+
 
 #ifndef CHARACTER_HPP
 #define CHARACTER_HPP
@@ -17,11 +19,17 @@ public:
 	void setBuffTimer(const int t);
 	int getBuffTimer();
 	int getHealth();
-
+	int getWeaponSpeed();
+	int getWeaponDamage();
+	void setWeaponSpeed(int weapon_speed);
+	void setWeaponDamage(int weapon_damage);
+	bool isFreeze = false;
 protected:
 	int speed;
 	int health;
 	int weapon_id;
+	int weapon_damage;
+	int weapon_speed;
 	int buff_timer;
 };
 

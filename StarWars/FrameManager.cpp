@@ -1,5 +1,6 @@
 #include "FrameManager.h"
 #include <string>
+#include "Particle.h"
 
 void FrameManager::InitFrame()
 {
@@ -111,14 +112,20 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 	Print("¡à");
 
 	SetCursorPosition({ (short)((objects[0])->GetCoord().getX() * 2), (short)(20 - (objects[0])->GetCoord().getY() - 1) });
-	Print("¡à");
+	if (objects[0]->GetVelocity().getX() >= 0)
+		Print("¢Ä");
+	else
+		Print("¢Å");
 
 	SetCursorPosition({ (short)((objects[1])->GetCoord().getX() * 2), (short)(20 - (objects[1])->GetCoord().getY()) });
 	SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 14);
 	Print("¡à");
 
 	SetCursorPosition({ (short)((objects[1])->GetCoord().getX() * 2), (short)(20 - (objects[1])->GetCoord().getY() - 1) });
-	Print("¡à");
+	if (objects[1]->GetVelocity().getX() > 0)
+		Print("¢Ä");
+	else
+		Print("¢Å");
 
 	SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 15);
 
@@ -131,8 +138,23 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 		case ObjectType::WALL:
 			Print("¡Û");
 			break;
-		default:
-			Print("¡á");
+		case ObjectType::PARTICLE :
+			if (((Particle*)*it)->getDamage() <= 5)
+			{
+				Print("¡¤");
+			}
+			else if (((Particle*)*it)->getDamage() <= 10)
+			{
+				Print("£­");
+			}
+			else
+			{
+				Print("¦¡");
+			}
+			break;
+		case ObjectType::DROPPED_SPECIAL_ITEM : case ObjectType::DROPPED_WEAPON :
+			Print("¢Ã");
+			break;
 		}
 	}
 

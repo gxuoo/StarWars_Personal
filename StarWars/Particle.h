@@ -12,7 +12,7 @@ public:
 	void setDamage(const int d);
 	int getDamage();
 private:
-	int damage;
+	int damage;//1~5 : Low, 6 ~ 10 Mid, 11 ~ High
 
 };
 

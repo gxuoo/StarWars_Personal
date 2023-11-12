@@ -11,7 +11,7 @@ DroppedSpecialItem::DroppedSpecialItem(int item_id) : DroppedItem()
 	object_type = ObjectType::DROPPED_SPECIAL_ITEM;
 }
 
-void DroppedSpecialItem::useItem(Object* itemuser) 
+void DroppedSpecialItem::useItem(Object* itemuser, Object* elseuser)
 {
 	const int PLAYER_MAX_HEALTH = 100;
 	
@@ -22,11 +22,13 @@ void DroppedSpecialItem::useItem(Object* itemuser)
 		break;
 
 	case 1:
-		((Character*)itemuser)->setBuffTimer(10);
-		((Character*)itemuser)->SetSpeed(2);
+		((Character*)itemuser)->setBuffTimer(200);
+		((Character*)itemuser)->SetSpeed(30);
 		break;
 	
-	case 3:
+	case 2:
+		((Character*)elseuser)->setBuffTimer(100);
+		((Character*)elseuser)->isFreeze = true;
 		break;
 	}
 }

@@ -25,6 +25,9 @@ void GameManager::MakePlayer()
 	player1->SetSpeed(20);
 	player2->SetSpeed(20);
 
+	player1->setWeapon(1);
+	player2->setWeapon(2);
+
 	for (int i = 0; i < 5; ++i)
 	{
 		Wall* wall = new Wall();
@@ -34,6 +37,25 @@ void GameManager::MakePlayer()
 
 		game->GetObjects().push_back(wall);
 	}
+}
+
+void GameManager::MakeItem()
+{
+	DroppedWeapon* weapon1 = new DroppedWeapon(1);
+	DroppedWeapon* weapon2 = new DroppedWeapon(2);
+	DroppedSpecialItem* item1 = new DroppedSpecialItem(1);
+
+
+	((Object*)weapon1)->SetCoord({ 15, 1 });
+	((Object*)weapon2)->SetCoord({ 10, 4 });
+	((Object*)weapon1)->SetNextCoord({ 15, 1 });
+	((Object*)weapon2)->SetNextCoord({ 10, 5 });
+	((Object*)item1)->SetCoord({ 23, 4 });
+	((Object*)item1)->SetNextCoord({ 23, 4 });
+
+	this->game->GetObjects().push_back(((Object*)weapon1));
+	this->game->GetObjects().push_back(((Object*)weapon2));
+	this->game->GetObjects().push_back(((Object*)item1));
 }
 
 void GameManager::MakeWall()
@@ -75,11 +97,14 @@ void GameManager::StartGame()
 	
 	MakePlayer();
 	MakeWall();
+	MakeItem();
 
 	while (PrecedeGame()) 
 	{
 		this->GetPlayerKeyInput();
 		
+
+
 		this->frameManager.MakeFrame(this->game->GetObjects());
 		this->frameManager.UpdateFrame();
 	}
@@ -116,18 +141,27 @@ void GameManager::GetPlayerKeyInput()
 		player1->GetVelocity().setX(0);
 	}
 
-	if (GetAsyncKeyState(0x35))
+	if (GetAsyncKeyState(0x47))
 	{
 		Particle* p = new Particle();
 
 		p->setDamage(10);
 
-		p->SetCoord(game->GetObjects()[0]->GetCoord() + Vec2{ 1, 0 });
-		p->SetNextCoord(game->GetObjects()[0]->GetCoord() + Vec2{ 1, 0 });
+		if (player1->GetVelocity().getX() >= 0)
+		{
+			p->SetCoord(player1->GetCoord() + Vec2{ 1, 0 });
+			p->SetNextCoord(player1->GetCoord() + Vec2{ 1, 0 });
+			p->SetVelocity(Vec2{ 1, 0 });
+		}
+		else
+		{
+			p->SetCoord(player1->GetCoord() + Vec2{ -1, 0 });
+			p->SetNextCoord(player1->GetCoord() + Vec2{ -1, 0 });
+			p->SetVelocity(Vec2{ -1, 0 });
+		}
 
-		p->SetVelocity(Vec2{ 1, 0 });
-
-		p->SetSpeed(10);
+		p->SetSpeed(player1->getWeaponSpeed());
+		p->setDamage(player1->getWeaponDamage());
 
 		game->GetObjects().push_back(p);
 	}
@@ -147,9 +181,29 @@ void GameManager::GetPlayerKeyInput()
 		player2->GetVelocity().setX(0);
 	}
 
-	if (GetAsyncKeyState(0x47))
+	if (GetAsyncKeyState(VK_NUMPAD5))
 	{
-		// p2 shoot
+		Particle* p = new Particle();
+
+		p->setDamage(10);
+
+		if (player2->GetVelocity().getX() > 0)
+		{
+			p->SetCoord(player2->GetCoord() + Vec2{ 1, 0 });
+			p->SetNextCoord(player2->GetCoord() + Vec2{ 1, 0 });
+			p->SetVelocity(Vec2{ 1, 0 });
+		}
+		else
+		{
+			p->SetCoord(player2->GetCoord() + Vec2{ -1, 0 });
+			p->SetNextCoord(player2->GetCoord() + Vec2{ -1, 0 });
+			p->SetVelocity(Vec2{ -1, 0 });
+		}
+
+		p->SetSpeed(player2->getWeaponSpeed());
+		p->setDamage(player2->getWeaponDamage());
+
+		game->GetObjects().push_back(p);
 	}
 
 	if (GetAsyncKeyState(0x57))

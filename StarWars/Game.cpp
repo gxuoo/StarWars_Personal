@@ -32,12 +32,28 @@ void Game::UpdateObjects()
 
 	for (auto& it : objects)
 	{
+	
 		if (it->last_updated + (1000 / it->GetSpeed()) > milli)
 			continue;
 
 		if (it->getObjectType() == ObjectType::PLAYER_CHARACTER)
 		{
 			PlayerCharacter* player = (PlayerCharacter*)(it);
+
+			if (player->getBuffTimer() > 0)
+			{
+				player->setBuffTimer(player->getBuffTimer() - 1);
+			}
+			else
+			{
+				player->isFreeze = false;
+				player->SetSpeed(20);
+			}
+
+			if (player->isFreeze == true)
+			{
+				continue;
+			}
 
 			if (player->is_mid_air && player->getJumpTimer() < player->getJumpLimit())
 				player->GetVelocity().setY(1);
@@ -46,6 +62,7 @@ void Game::UpdateObjects()
 				player->GetVelocity().setY(-1);
 
 			it->last_updated = milli;
+
 		}
 
 		UpdateObjectNextPosition(it);
@@ -96,6 +113,14 @@ void Game::UpdateObjects()
 				}
 				if (it2->IsCharacter() && it->IsItem())
 				{
+					if (it2 == objects[0])
+					{
+						((DroppedItem*)it)->useItem(objects[0], objects[1]);
+					}
+					else
+					{
+						((DroppedItem*)it)->useItem(objects[1], objects[0]);
+					}
 					it->SetDeleteObject(true);
 					should_delete = true;
 
