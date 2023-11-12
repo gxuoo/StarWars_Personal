@@ -9,7 +9,11 @@ class PlayerCharacter : public Character {
 public:
 	PlayerCharacter();
 	~PlayerCharacter() = default;
+	void setJumpTimer(const int time);
+	int getJumpTimer();
+	int getJumpLimit();
 private:
+	int jump_timer;
 };
 
 #endif

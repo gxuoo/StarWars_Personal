@@ -39,6 +39,12 @@ void Character::setBuffTimer(const int time)
 	buff_timer = time;
 }
 
-int  Character::getBuffTimer() {
+int Character::getBuffTimer() 
+{
 	return buff_timer;
+}
+
+int Character::getHealth()
+{
+	return this->health;
 }

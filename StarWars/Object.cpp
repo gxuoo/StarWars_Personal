@@ -132,7 +132,6 @@ bool Object::IsCollisionWith(const Object* obj)
 		{
 			if (this->nextCoord == obj->nextCoord + Vec2{ i, j } || this->coord == obj->coord + Vec2{ i, j })
 				return true;
-
 			}
 	}
 

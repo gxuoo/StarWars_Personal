@@ -16,6 +16,7 @@ public:
 	int getWeapon();
 	void setBuffTimer(const int t);
 	int getBuffTimer();
+	int getHealth();
 
 protected:
 	int speed;

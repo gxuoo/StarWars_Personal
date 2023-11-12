@@ -1,4 +1,5 @@
 #include "FrameManager.h"
+#include <string>
 
 void FrameManager::InitFrame()
 {
@@ -76,14 +77,17 @@ void FrameManager::PrintWithPosition(const char* str, COORD coord)
 
 void FrameManager::ClearBuffer()
 {
-	char* line = (char*)malloc(sizeof(char) * (this->frame.consoleInfo.nWidth + 1));
-	for (int i = 0; i < this->frame.consoleInfo.nWidth; ++i)
+	const int WIDTH = this->frame.consoleInfo.nWidth;
+	const int HEIGHT = this->frame.consoleInfo.nHeight;
+
+	char* line = (char*)malloc(sizeof(char) * (WIDTH + 1));
+	for (int i = 0; i < WIDTH; ++i)
 		line[i] = ' ';
 
-	for (short i = 0; i < this->frame.consoleInfo.nHeight; ++i)
+	for (short i = 0; i < HEIGHT; ++i)
 	{
 		this->SetCursorPosition({ 0, i });
-		WriteFile(this->frame.bufferHandler[this->frame.currentBufferIndex], line, this->frame.consoleInfo.nWidth, nullptr, NULL);
+		WriteFile(this->frame.bufferHandler[this->frame.currentBufferIndex], line, WIDTH, nullptr, NULL);
 	}
 }
 
@@ -102,20 +106,36 @@ COORD FrameManager::GetCursorPosition()
 
 void FrameManager::MakeFrame(std::vector<Object*>& objects)
 {
-	for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it)
+	SetCursorPosition({ (short)((objects[0])->GetCoord().getX() * 2), (short)(20 - (objects[0])->GetCoord().getY()) });
+	SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 12);
+	Print("бр");
+
+	SetCursorPosition({ (short)((objects[0])->GetCoord().getX() * 2), (short)(20 - (objects[0])->GetCoord().getY() - 1) });
+	Print("бр");
+
+	SetCursorPosition({ (short)((objects[1])->GetCoord().getX() * 2), (short)(20 - (objects[1])->GetCoord().getY()) });
+	SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 14);
+	Print("бр");
+
+	SetCursorPosition({ (short)((objects[1])->GetCoord().getX() * 2), (short)(20 - (objects[1])->GetCoord().getY() - 1) });
+	Print("бр");
+
+	SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 15);
+
+	for (std::vector<Object*>::iterator it = objects.begin() + 2; it != objects.end(); ++it)
 	{
-		SetCursorPosition({ (short)(*it)->GetCoord().getX(), (short)(*it)->GetCoord().getY() });
+		SetCursorPosition({ (short)((*it)->GetCoord().getX() * 2), (short)(20 - (*it)->GetCoord().getY()) });
 		
 		switch ((*it)->getObjectType())
 		{
-		case ObjectType::PLAYER_CHARACTER:
-			Print("P");
-			break;
 		case ObjectType::WALL:
-			Print("W");
+			Print("б█");
 			break;
 		default:
-			Print("B");
+			Print("бс");
 		}
 	}
+
+	SetCursorPosition({ 10, 10 });
+	Print(std::to_string(((PlayerCharacter*)objects[1])->getHealth()).c_str());
 }

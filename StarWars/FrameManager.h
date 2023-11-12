@@ -2,6 +2,7 @@
 
 #include "Frame.h"
 #include "Object.h"
+#include "PlayerCharacter.h"
 
 #ifndef FRAME_MANAGER_HPP
 #define FRAME_MANAGER_HPP

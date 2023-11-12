@@ -1,12 +1,8 @@
 #include "Game.h"
-#include "Character.h"
-#include "Particle.h"
-#include "DroppedItem.h"
 
 Game::Game(bool gameOver) :gameOver(gameOver)
 {
 	this->objects = std::vector<Object*>();
-	this->current_step = 0;
 }
 
 bool Game::IsGameOver()
@@ -24,79 +20,89 @@ std::vector<Object*>& Game::GetObjects()
 	return this->objects;
 }
 
-void Game::UpdateObjectNextPosition()
+void Game::UpdateObjectNextPosition(Object *object)
 {
-	if (current_step == 1000)
-		current_step -= 1000;
-
-	for (std::vector<Object*>::iterator it = objects.begin(); it < objects.end(); ++it)
-		if(current_step % (1000 / (*it)->GetSpeed()) == 0)
-			(*it)->SetNextCoord((*it)->GetCoord() + (*it)->GetVelocity());
-
-	current_step += 1;
+	object->SetNextCoord(object->GetCoord() + object->GetVelocity());
 }
 
 void Game::UpdateObjects()
 {
-	UpdateObjectNextPosition();
+	auto milli = GetTickCount64();
+	bool should_delete = false;
 
-	for (std::vector<Object *>::iterator it = objects.begin(); it < objects.end(); ++it)
+	for (auto& it: objects)
 	{
-		for (std::vector<Object*>::iterator it2 = objects.begin(); it2 < objects.end(); ++it2)
+		if (it->lastupdated + (1000 / it->GetSpeed()) > milli)
+			continue;
+
+		it->lastupdated = milli;
+		UpdateObjectNextPosition(it);
+
+		for (auto& it2 : objects)
 		{
-			if (it != it2 && (*it)->IsCollisionWith((*it2)))
+			if (it != it2 && it->IsCollisionWith(it2))
 			{
-				if ((*it)->IsCharacter() && (*it2)->getObjectType() == ObjectType::WALL)
+				if (it->IsCharacter() && it2->getObjectType() == ObjectType::WALL)
 				{
-					(*it)->SetNextCoord((*it)->GetCoord());
+					it->SetNextCoord(it->GetCoord());
 				}
 
-				if ((*it)->getObjectType() == ObjectType::PARTICLE)
+				if (it2->IsCharacter() && it->IsItem())
 				{
-					if ((*it2)->IsCharacter())
-					{
-						((Character*)(*it2))->giveDamage(((Particle*)(*it))->getDamage());
-						(*it)->SetDeleteObject(true);
-
-						break;
-					}
-
-					if ((*it2)->getObjectType() == ObjectType::WALL)
-					{
-						(*it)->SetDeleteObject(true);
-
-						break;
-					}
-				}
-
-				if ((*it2)->IsCharacter() && (*it)->IsItem())
-				{
-					(*it)->SetDeleteObject(true);
+					it->SetDeleteObject(true);
+					should_delete = true;
 
 					break;
 				}
+
+				if (it->getObjectType() == ObjectType::PARTICLE)
+				{
+					if (it2->getObjectType() == ObjectType::WALL)
+					{
+						it->SetDeleteObject(true);
+						should_delete = true;
+
+						break;
+					}
+
+					if (it2->IsCharacter())
+					{
+						(dynamic_cast<Character*>(it2))->giveDamage((dynamic_cast<Particle*>(it))->getDamage());
+						it->SetDeleteObject(true);
+						should_delete = true;
+
+						break;
+					}
+				}
 			}
 		}
+
+		this->UpdateObjectPosition();
+
+		if (it == objects[0])
+			objects[0]->GetVelocity().setX(0);
+
+		if (it == objects[1])
+			objects[1]->GetVelocity().setX(0);
 	}
 
-	for (int i = 0; i < objects.size(); ++i)
+	if (!should_delete)
+		return;
+
+	for (int i = 2; i < objects.size(); ++i)
 	{
 		if (objects[i]->GetDeleteObject())
 		{
 			delete (objects[i]);
 			objects.erase(objects.begin() + i);
+
 			--i;
 		}
 	}
-
-	this->UpdateObjectPosition();
 }
 
 void Game::UpdateObjectPosition()
 {
 	for (std::vector<Object*>::iterator it = objects.begin(); it < objects.end(); ++it)
 		(*it)->SetCoord((*it)->GetNextCoord());
-
-	//objects[0]->GetSpeed().setX(0);
-	//objects[1]->GetSpeed().setX(0);
 }

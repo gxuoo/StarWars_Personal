@@ -13,6 +13,8 @@
 class GameManager {
 public:
 	GameManager();
+	void MakePlayer();
+	void MakeWall();
 	void StartGame();
 	bool PrecedeGame();
 	void GetPlayerKeyInput();
