@@ -88,22 +88,22 @@ bool GameManager::PrecedeGame()
 
 void GameManager::GetPlayerKeyInput()
 {
+	PlayerCharacter* player1 = dynamic_cast<PlayerCharacter*>(game->GetObjects()[0]);
+	PlayerCharacter* player2 = dynamic_cast<PlayerCharacter*>(game->GetObjects()[1]);
+
 	if (GetAsyncKeyState(VK_LEFT))
 	{
-		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(game->GetObjects()[0]);
-		player->GetVelocity().setX(-1);
+		player1->GetVelocity().setX(-1);
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT))
 	{
-		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(game->GetObjects()[0]);
-		player->GetVelocity().setX(1);
+		player1->GetVelocity().setX(1);
 	}
 
 	else if (!GetAsyncKeyState(VK_LEFT) && !GetAsyncKeyState(VK_RIGHT))
 	{
-		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(game->GetObjects()[0]);
-		player->GetVelocity().setX(0);
+		player1->GetVelocity().setX(0);
 	}
 
 	if (GetAsyncKeyState(0x35))
@@ -112,32 +112,29 @@ void GameManager::GetPlayerKeyInput()
 
 		p->setDamage(10);
 
-		p->SetCoord(game->GetObjects()[0]->GetCoord() + Vec2{1, 0});
+		p->SetCoord(game->GetObjects()[0]->GetCoord() + Vec2{ 1, 0 });
 		p->SetNextCoord(game->GetObjects()[0]->GetCoord() + Vec2{ 1, 0 });
 
 		p->SetVelocity(Vec2{ 1, 0 });
 
 		p->SetSpeed(10);
-		
+
 		game->GetObjects().push_back(p);
 	}
 
 	if (GetAsyncKeyState(0x41))
 	{
-		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(game->GetObjects()[1]);
-		player->GetVelocity().setX(-1);
+		player2->GetVelocity().setX(-1);
 	}
 
-	if(GetAsyncKeyState(0x44))
+	if (GetAsyncKeyState(0x44))
 	{
-		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(game->GetObjects()[1]);
-		player->GetVelocity().setX(1);
+		player2->GetVelocity().setX(1);
 	}
 
 	else if (!GetAsyncKeyState(0x41) && !GetAsyncKeyState(0x44))
 	{
-		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(game->GetObjects()[1]);
-		player->GetVelocity().setX(0);
+		player2->GetVelocity().setX(0);
 	}
 
 	if (GetAsyncKeyState(0x47))
@@ -145,5 +142,15 @@ void GameManager::GetPlayerKeyInput()
 		// p2 shoot
 	}
 
-	return;
+	if (GetAsyncKeyState(0x57))
+	{
+		if (player1->GetVelocity().getY() == 0)
+			player1->GetVelocity().setY(1);
+	}
+
+	if (GetAsyncKeyState(VK_UP))
+	{
+		if (player2->GetVelocity().getY() == 0)
+			player2->GetVelocity().setY(1);
+	}
 }
