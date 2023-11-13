@@ -27,16 +27,6 @@ void GameManager::MakePlayer()
 
 	player1->setWeapon(1);
 	player2->setWeapon(2);
-
-	for (int i = 0; i < 5; ++i)
-	{
-		Wall* wall = new Wall();
-
-		wall->SetCoord({ i + 10, 4 });
-		wall->SetNextCoord(wall->GetCoord());
-
-		game->GetObjects().push_back(wall);
-	}
 }
 
 void GameManager::MakeItem()
@@ -90,6 +80,25 @@ void GameManager::MakeWall()
 	}
 }
 
+void GameManager::MakeMap()
+{
+	for (int y = 1; y < game->HEIGHT - 1; ++y)
+	{
+		for (int x = 1; x < game->WIDTH - 1; ++x)
+		{
+			if (Game::map[game->HEIGHT - y - 1][x ] == 1)
+			{
+				Wall* wall = new Wall();
+
+				wall->SetCoord({ x, y });
+				wall->SetNextCoord(wall->GetCoord());
+
+				game->GetObjects().push_back(wall);
+			}
+		}
+	}
+}
+
 void GameManager::StartGame()
 {
 	this->frameManager.InitFrame();
@@ -97,7 +106,7 @@ void GameManager::StartGame()
 	MakePlayer();
 	MakeWall();
 	MakeItem();
-
+	MakeMap();
 	while (PrecedeGame()) 
 	{
 		this->GetPlayerKeyInput();
@@ -107,6 +116,8 @@ void GameManager::StartGame()
 		this->frameManager.MakeFrame(this->game->GetObjects());
 		this->frameManager.UpdateFrame();
 	}
+
+	Sleep(100);
 }
 
 bool GameManager::PrecedeGame()
@@ -187,8 +198,8 @@ void GameManager::PlayerShoot(PlayerCharacter* player)
 	if (player->last_shot + (1000.0 / player->getWeaponSpeed()) > milli)
 		return;
 
-
-	player->bullet_count -= 1;
+	if(player->bullet_count != 0)
+		player->bullet_count -= 1;
 	player->last_shot = milli;
 
 
@@ -241,3 +252,5 @@ void GameManager::PlayerShoot(PlayerCharacter* player)
 
 	game->GetObjects().push_back(p);
 }
+
+

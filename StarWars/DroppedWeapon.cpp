@@ -31,11 +31,11 @@ int DroppedWeapon::getSpeed(int weapon_id)
 	switch (weapon_id)
 	{
 	case 1://pistol
-		return 1;
+		return 3;
 	case 2://rifle
-		return  2;
+		return  6;
 	default://fist
-		return 1;
+		return 3;
 		break;
 	}
 }
@@ -45,11 +45,11 @@ int DroppedWeapon::getBulletCount(int weapon_id)
 	switch (weapon_id)
 	{
 	case 1:
-		return 10;
+		return 20;
 	case 2:
-		return 30;
+		return 60;
 	case 3:
-		return 10000;
+		return 0;
 	}
 }
 

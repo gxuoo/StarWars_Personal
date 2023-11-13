@@ -45,6 +45,33 @@ int Character::getWeapon()
 {
 	return weapon_id;
 }
+
+std::string Character::getWeaponName()
+{
+	switch (weapon_id)
+	{
+	case 1 :
+		return "±ÇÃÑ";
+	case 2 :
+		return "µ¹°İ¼ÒÃÑ";
+	default :
+		return "ÁÖ¸Ô";
+	}
+}
+
+std::string Character::getBuffName()
+{
+	switch (this->current_buff)
+	{
+	case 1:
+		return "¼Óµµ x1.5";
+	case 2:
+		return "¾ó·ÁÁü!";
+	default:
+		return "¾øÀ½";
+	}
+}
+
 void Character::setBuffTimer(const int time) 
 {
 	buff_timer = time;

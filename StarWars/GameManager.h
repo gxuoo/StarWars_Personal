@@ -17,6 +17,7 @@ public:
 	void MakePlayer();
 	void MakeItem();
 	void MakeWall();
+	void MakeMap();
 	void StartGame();
 	bool PrecedeGame();
 	void GetPlayerKeyInput();

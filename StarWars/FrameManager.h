@@ -20,6 +20,7 @@ public:
 	void SetCursorPosition(COORD);
 	COORD GetCursorPosition();
 	void MakeFrame(std::vector<Object*>&);
+	void drawStatus(Character* player1, Character* player2);
 private:
 	Frame frame;
 };

@@ -21,6 +21,7 @@ public:
 	std::vector<Object*>& GetObjects();
 	const int WIDTH = 41;
 	const int HEIGHT = 20;
+	const static int map[20][41];
 private:
 	bool gameOver;
 	std::vector<Object*> objects;

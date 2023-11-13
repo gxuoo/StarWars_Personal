@@ -28,6 +28,8 @@ public:
 	int bullet_count;
 	long long last_shot;
 	int current_buff;
+	std::string getWeaponName();
+	std::string getBuffName();
 protected:
 	int speed;
 	int health;

@@ -11,7 +11,7 @@ void FrameManager::InitFrame()
 	CONSOLE_SCREEN_BUFFER_INFO consoleInfo{ 0, };
 	GetConsoleScreenBufferInfo(this->frame.consoleHandler, &consoleInfo);
 	consoleInfo.dwSize.X = 40;
-	consoleInfo.dwSize.Y = 30;
+	consoleInfo.dwSize.Y = 40;
 
 	this->frame.consoleInfo.nWidth = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left;
 	this->frame.consoleInfo.nHeight = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top;
@@ -158,8 +158,67 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 		}
 	}
 
+	drawStatus((Character*)objects[0], (Character*)objects[1]);
+
 	SetCursorPosition({ 10, 10 });
 	std::string str = std::to_string(((PlayerCharacter*)objects[0])->current_buff);
 	//std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getX()) + " " + std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getY());
 	Print(str.c_str());
+
+	
+}
+
+void FrameManager::drawStatus(Character* player1, Character* player2)
+{
+	SetCursorPosition({ 1, 22 });
+	Print("플레이어 1");
+	SetCursorPosition({ 1, 23 });
+	Print("체력 : ");
+	for (int i = 0; i <= 100; i += 10) 
+	{
+		if (player1->getHealth() >= i)
+		{
+			Print("■");
+		}
+		else
+		{
+			Print("□");
+		}
+	}
+	SetCursorPosition({ 1, 24 });
+	Print("무기 : ");
+	Print(player1->getWeaponName().c_str());
+	SetCursorPosition({ 1, 25 });
+	Print("탄약 : ");
+	Print(std::to_string(player1->bullet_count).c_str());
+	SetCursorPosition({ 1, 26 });
+	Print("상태 : ");
+	Print(player1->getBuffName().c_str());
+
+	
+	SetCursorPosition({ 52, 22 });
+	Print("플레이어 2");
+	SetCursorPosition({ 52, 23 });
+	Print("체력 : ");
+	for (int i = 0; i <= 100; i += 10)
+	{
+		if (player2->getHealth() >= i)
+		{
+			Print("■");
+		}
+		else
+		{
+			Print("□");
+		}
+	}
+	SetCursorPosition({ 52, 24 });
+	Print("무기 : ");
+	Print(player2->getWeaponName().c_str());
+	SetCursorPosition({ 52, 25 });
+	Print("탄약 : ");
+	Print(std::to_string(player2->bullet_count).c_str());
+	SetCursorPosition({ 52, 26 });
+	Print("상태 : ");
+	Print(player2->getBuffName().c_str());
+	
 }
