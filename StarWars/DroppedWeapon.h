@@ -13,6 +13,7 @@ public:
 	~DroppedWeapon() = default;
 	static int getDamage(int weapon_id);
 	static int getSpeed(int weapon_id);
+	static int getBulletCount(int weapon_id);
 	void useItem(Object* itemuser, Object* elseuser);
 private:
 	int weapon_id;

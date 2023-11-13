@@ -45,7 +45,6 @@ void GameManager::MakeItem()
 	DroppedWeapon* weapon2 = new DroppedWeapon(2);
 	DroppedSpecialItem* item1 = new DroppedSpecialItem(1);
 
-
 	((Object*)weapon1)->SetCoord({ 15, 1 });
 	((Object*)weapon2)->SetCoord({ 10, 4 });
 	((Object*)weapon1)->SetNextCoord({ 15, 1 });
@@ -129,82 +128,38 @@ void GameManager::GetPlayerKeyInput()
 	if (GetAsyncKeyState(0x41))
 	{
 		player1->GetVelocity().setX(-1);
+		player1->direction = -1;
 	}
 
 	if (GetAsyncKeyState(0x44))
 	{
 		player1->GetVelocity().setX(1);
+		player1->direction = 1;
 	}
 
 	else if (!GetAsyncKeyState(0x41) && !GetAsyncKeyState(0x44))
-	{
 		player1->GetVelocity().setX(0);
-	}
 
 	if (GetAsyncKeyState(0x47))
-	{
-		Particle* p = new Particle();
-
-		p->setDamage(10);
-
-		if (player1->GetVelocity().getX() >= 0)
-		{
-			p->SetCoord(player1->GetCoord() + Vec2{ 1, 0 });
-			p->SetNextCoord(player1->GetCoord() + Vec2{ 1, 0 });
-			p->SetVelocity(Vec2{ 1, 0 });
-		}
-		else
-		{
-			p->SetCoord(player1->GetCoord() + Vec2{ -1, 0 });
-			p->SetNextCoord(player1->GetCoord() + Vec2{ -1, 0 });
-			p->SetVelocity(Vec2{ -1, 0 });
-		}
-
-		p->SetSpeed(player1->getWeaponSpeed());
-		p->setDamage(player1->getWeaponDamage());
-
-		game->GetObjects().push_back(p);
-	}
+		PlayerShoot(player1);
 
 	if (GetAsyncKeyState(VK_LEFT))
 	{
 		player2->GetVelocity().setX(-1);
+		player2->direction = -1;
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT))
 	{
 		player2->GetVelocity().setX(1);
+		player2->direction = 1;
 	}
 
 	else if (!GetAsyncKeyState(VK_LEFT) && !GetAsyncKeyState(VK_RIGHT))
-	{
 		player2->GetVelocity().setX(0);
-	}
 
 	if (GetAsyncKeyState(VK_NUMPAD5))
-	{
-		Particle* p = new Particle();
-
-		p->setDamage(10);
-
-		if (player2->GetVelocity().getX() > 0)
-		{
-			p->SetCoord(player2->GetCoord() + Vec2{ 1, 0 });
-			p->SetNextCoord(player2->GetCoord() + Vec2{ 1, 0 });
-			p->SetVelocity(Vec2{ 1, 0 });
-		}
-		else
-		{
-			p->SetCoord(player2->GetCoord() + Vec2{ -1, 0 });
-			p->SetNextCoord(player2->GetCoord() + Vec2{ -1, 0 });
-			p->SetVelocity(Vec2{ -1, 0 });
-		}
-
-		p->SetSpeed(player2->getWeaponSpeed());
-		p->setDamage(player2->getWeaponDamage());
-
-		game->GetObjects().push_back(p);
-	}
+		PlayerShoot(player2);
 
 	if (GetAsyncKeyState(0x57))
 	{
@@ -215,11 +170,6 @@ void GameManager::GetPlayerKeyInput()
 		}
 	}
 
-	else if (!GetAsyncKeyState(0x57))
-	{
-		//player2->setJumpTimer(player2->getJumpTimer() + 2);
-	}
-
 	if (GetAsyncKeyState(VK_UP))
 	{
 		if (player2->GetVelocity().getY() == 0)
@@ -228,9 +178,41 @@ void GameManager::GetPlayerKeyInput()
 			player2->GetVelocity().setY(1);
 		}
 	}
+}
 
-	else if (!GetAsyncKeyState(VK_UP))
+void GameManager::PlayerShoot(PlayerCharacter* player)
+{
+	auto milli = GetTickCount64();
+
+	if (player->last_shot + (1000.0 / player->getWeaponSpeed()) > milli)
+		return;
+
+	if (player->bullet_count <= 0)
+		return;
+
+	player->bullet_count -= 1;
+	player->last_shot = milli;
+
+	Particle* p = new Particle();
+
+	p->setDamage(10);
+
+	if (player->direction >= 0)
 	{
-		//player1->setJumpTimer(150);
+		p->SetCoord(player->GetCoord() + Vec2{ 1, 0 });
+		p->SetNextCoord(player->GetCoord() + Vec2{ 1, 0 });
+		p->SetVelocity(Vec2{ 1, 0 });
 	}
+
+	else
+	{
+		p->SetCoord(player->GetCoord() + Vec2{ -1, 0 });
+		p->SetNextCoord(player->GetCoord() + Vec2{ -1, 0 });
+		p->SetVelocity(Vec2{ -1, 0 });
+	}
+
+	p->SetSpeed(player->getWeaponSpeed());
+	p->setDamage(player->getWeaponDamage());
+
+	game->GetObjects().push_back(p);
 }

@@ -12,6 +12,9 @@ Character::Character() : Object()
 	speed = 1;
 	object_type = ObjectType::CHARACTER;
 	size = { 1, 2 };
+	direction = 0;
+	bullet_count = 0;
+	last_shot = 0;
 }
 
 void Character::setWeapon(int weapon_id) 
@@ -19,6 +22,7 @@ void Character::setWeapon(int weapon_id)
 	this->weapon_id = weapon_id;
 	weapon_damage = DroppedWeapon::getDamage(weapon_id);
 	weapon_speed = DroppedWeapon::getSpeed(weapon_id);
+	bullet_count = DroppedWeapon::getBulletCount(weapon_id);
 }
 
 void Character::setHealth(const int health) 

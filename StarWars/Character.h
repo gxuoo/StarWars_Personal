@@ -24,6 +24,9 @@ public:
 	void setWeaponSpeed(int weapon_speed);
 	void setWeaponDamage(int weapon_damage);
 	bool isFreeze = false;
+	int direction;
+	int bullet_count;
+	long long last_shot;
 protected:
 	int speed;
 	int health;

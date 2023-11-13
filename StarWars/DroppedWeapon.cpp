@@ -40,6 +40,19 @@ int DroppedWeapon::getSpeed(int weapon_id)
 	}
 }
 
+int DroppedWeapon::getBulletCount(int weapon_id)
+{
+	switch (weapon_id)
+	{
+	case 1:
+		return 10;
+	case 2:
+		return 30;
+	case 3:
+		return 10000;
+	}
+}
+
 void DroppedWeapon::useItem(Object* itemuser, Object* elseuser) {
 	((Character*)itemuser)->setWeapon(weapon_id);
 	((Character*)itemuser)->setWeaponDamage(damage);

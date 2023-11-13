@@ -20,6 +20,7 @@ public:
 	void StartGame();
 	bool PrecedeGame();
 	void GetPlayerKeyInput();
+	void PlayerShoot(PlayerCharacter*);
 private:
 	FrameManager frameManager;
 	Game* game;

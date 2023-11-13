@@ -32,8 +32,7 @@ void Game::UpdateObjects()
 
 	for (auto& it : objects)
 	{
-	
-		if (it->last_updated + (1000 / it->GetSpeed()) > milli)
+		if (it->last_updated + (1000.0 / it->GetSpeed()) > milli)
 			continue;
 
 		if (it->getObjectType() == ObjectType::PLAYER_CHARACTER)

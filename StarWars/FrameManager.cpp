@@ -112,7 +112,7 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 	Print("¡à");
 
 	SetCursorPosition({ (short)((objects[0])->GetCoord().getX() * 2), (short)(20 - (objects[0])->GetCoord().getY() - 1) });
-	if (objects[0]->GetVelocity().getX() >= 0)
+	if (((PlayerCharacter*)objects[0])->direction >= 0)
 		Print("¢Ä");
 	else
 		Print("¢Å");
@@ -122,7 +122,7 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 	Print("¡à");
 
 	SetCursorPosition({ (short)((objects[1])->GetCoord().getX() * 2), (short)(20 - (objects[1])->GetCoord().getY() - 1) });
-	if (objects[1]->GetVelocity().getX() > 0)
+	if (((PlayerCharacter*)objects[1])->direction >= 0)
 		Print("¢Ä");
 	else
 		Print("¢Å");
@@ -159,6 +159,6 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 	}
 
 	SetCursorPosition({ 10, 10 });
-	std::string str = std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getX()) + " " + std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getY());
+	std::string str = std::to_string(((PlayerCharacter*)objects[0])->bullet_count);//std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getX()) + " " + std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getY());
 	Print(str.c_str());
 }
