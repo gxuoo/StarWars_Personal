@@ -24,11 +24,13 @@ void DroppedSpecialItem::useItem(Object* itemuser, Object* elseuser)
 	case 1:
 		((Character*)itemuser)->setBuffTimer(200);
 		((Character*)itemuser)->SetSpeed(30);
+		((Character*)itemuser)->current_buff = 1;
 		break;
 	
 	case 2:
 		((Character*)elseuser)->setBuffTimer(100);
 		((Character*)elseuser)->isFreeze = true;
+		((Character*)elseuser)->current_buff = 2;
 		break;
 	}
 }

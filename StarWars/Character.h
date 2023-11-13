@@ -27,6 +27,7 @@ public:
 	int direction;
 	int bullet_count;
 	long long last_shot;
+	int current_buff;
 protected:
 	int speed;
 	int health;

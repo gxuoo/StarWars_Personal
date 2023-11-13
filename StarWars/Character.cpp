@@ -15,6 +15,7 @@ Character::Character() : Object()
 	direction = 0;
 	bullet_count = 0;
 	last_shot = 0;
+	current_buff = 0;
 }
 
 void Character::setWeapon(int weapon_id) 

@@ -159,6 +159,7 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 	}
 
 	SetCursorPosition({ 10, 10 });
-	std::string str = std::to_string(((PlayerCharacter*)objects[0])->bullet_count);//std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getX()) + " " + std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getY());
+	std::string str = std::to_string(((PlayerCharacter*)objects[0])->current_buff);
+	//std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getX()) + " " + std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getY());
 	Print(str.c_str());
 }

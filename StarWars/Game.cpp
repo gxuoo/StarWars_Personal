@@ -47,6 +47,7 @@ void Game::UpdateObjects()
 			{
 				player->isFreeze = false;
 				player->SetSpeed(20);
+				player->current_buff = 0;
 			}
 
 			if (player->isFreeze == true)
@@ -139,6 +140,11 @@ void Game::UpdateObjects()
 					if (it2->IsCharacter())
 					{
 						(dynamic_cast<Character*>(it2))->giveDamage((dynamic_cast<Particle*>(it))->getDamage());
+						if ((dynamic_cast<Character*>(it2))->getHealth() <= 0)
+						{
+							this->SetGameOver(true);
+						}
+
 						it->SetDeleteObject(true);
 						should_delete = true;
 
