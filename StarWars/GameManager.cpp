@@ -34,6 +34,7 @@ void GameManager::MakeItem()
 	DroppedWeapon* weapon1 = new DroppedWeapon(1);
 	DroppedWeapon* weapon2 = new DroppedWeapon(2);
 	DroppedSpecialItem* item1 = new DroppedSpecialItem(2);
+	DroppedSpecialItem* item2 = new DroppedSpecialItem(1);
 
 	((Object*)weapon1)->SetCoord({ 15, 1 });
 	((Object*)weapon2)->SetCoord({ 10, 4 });
@@ -41,10 +42,13 @@ void GameManager::MakeItem()
 	((Object*)weapon2)->SetNextCoord({ 10, 5 });
 	((Object*)item1)->SetCoord({ 23, 4 });
 	((Object*)item1)->SetNextCoord({ 23, 4 });
+	((Object*)item2)->SetCoord({ 25, 8 });
+	((Object*)item2)->SetNextCoord({ 25, 8 });
 
 	this->game->GetObjects().push_back(((Object*)weapon1));
 	this->game->GetObjects().push_back(((Object*)weapon2));
 	this->game->GetObjects().push_back(((Object*)item1));
+	this->game->GetObjects().push_back(((Object*)item2));
 }
 
 void GameManager::MakeWall()
