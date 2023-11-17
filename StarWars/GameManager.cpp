@@ -31,15 +31,19 @@ void GameManager::MakePlayer()
 
 void GameManager::MakeItem()
 {
-	DroppedWeapon* weapon1 = new DroppedWeapon(1);
-	DroppedWeapon* weapon2 = new DroppedWeapon(2);
+	DroppedWeapon* weapon1 = new DroppedWeapon(4);
+	DroppedWeapon* weapon2 = new DroppedWeapon(5);
+	DroppedWeapon* weapon3 = new DroppedWeapon(3);
+
 	DroppedSpecialItem* item1 = new DroppedSpecialItem(2);
 	DroppedSpecialItem* item2 = new DroppedSpecialItem(1);
 
 	((Object*)weapon1)->SetCoord({ 15, 1 });
 	((Object*)weapon2)->SetCoord({ 10, 4 });
+	((Object*)weapon3)->SetCoord({10, 10 });
 	((Object*)weapon1)->SetNextCoord({ 15, 1 });
 	((Object*)weapon2)->SetNextCoord({ 10, 5 });
+	((Object*)weapon3)->SetNextCoord({ 20, 10 });
 	((Object*)item1)->SetCoord({ 23, 4 });
 	((Object*)item1)->SetNextCoord({ 23, 4 });
 	((Object*)item2)->SetCoord({ 25, 8 });
@@ -47,6 +51,7 @@ void GameManager::MakeItem()
 
 	this->game->GetObjects().push_back(((Object*)weapon1));
 	this->game->GetObjects().push_back(((Object*)weapon2));
+	this->game->GetObjects().push_back(((Object*)weapon3));
 	this->game->GetObjects().push_back(((Object*)item1));
 	this->game->GetObjects().push_back(((Object*)item2));
 }
@@ -199,62 +204,49 @@ void GameManager::PlayerShoot(PlayerCharacter* player)
 {
 	auto milli = GetTickCount64();
 
-	if (player->last_shot + (1000.0 / player->getWeaponSpeed()) > milli)
+	if (player->last_shot + (1000.0 / player->getWeaponRPM()) > milli)
 		return;
 
 	if(player->bullet_count != 0)
 		player->bullet_count -= 1;
 	player->last_shot = milli;
 
+	for (int i = 0; i < (player->isWeaponShotgun() ? 3 : 1); i++)
+	{
+		Particle* p = new Particle();
 
-	if (player->getWeapon() == 0)//if weapon is fist
-	{//辟立公扁 咀记/ melee 咀记
-		if (player == game->GetObjects()[0])
+		p->SetSpeed(player->getWeaponSpeed());
+		p->setDamage(player->getWeaponDamage());
+		p->shooter = player;
+		p->max_range = player->getWeaponMaxRange();
+		p->isMelee = player->isWeaponMelee();
+		p->isShotgun = player->isWeaponShotgun();
+
+		if (player->direction >= 0)
 		{
-			if (((player->GetCoord() + Vec2(player->direction, 0) == game->GetObjects()[1]->GetCoord()) || (player->GetCoord() == game->GetObjects()[1]->GetCoord())))
-			{
-				((Character*)game->GetObjects()[1])->giveDamage(player->getWeaponDamage());
-				return;
-			}
+			p->SetCoord(player->GetCoord() + Vec2{ 1, i });
+			p->SetNextCoord(player->GetCoord() + Vec2{ 1, i });
+			p->SetVelocity(Vec2{ 1, 0 });
 		}
+
 		else
 		{
-			if (((player->GetCoord() + Vec2(player->direction, 0) == game->GetObjects()[0]->GetCoord()) || (player->GetCoord() == game->GetObjects()[0]->GetCoord())))
-			{
-				((Character*)game->GetObjects()[0])->giveDamage(player->getWeaponDamage());
-				return;
-			}
+			p->SetCoord(player->GetCoord() + Vec2{ -1, i });
+			p->SetNextCoord(player->GetCoord() + Vec2{ -1, i });
+			p->SetVelocity(Vec2{ -1, 0 });
 		}
-		return;
+
+		
+
+		game->GetObjects().push_back(p);
 	}
-
-	Particle* p = new Particle();
-
-	p->setDamage(10);
-
-	if (player->direction >= 0)
-	{
-		p->SetCoord(player->GetCoord() + Vec2{ 1, 0 });
-		p->SetNextCoord(player->GetCoord() + Vec2{ 1, 0 });
-		p->SetVelocity(Vec2{ 1, 0 });
-	}
-
-	else
-	{
-		p->SetCoord(player->GetCoord() + Vec2{ -1, 0 });
-		p->SetNextCoord(player->GetCoord() + Vec2{ -1, 0 });
-		p->SetVelocity(Vec2{ -1, 0 });
-	}
-
-	p->SetSpeed(player->getWeaponSpeed());
-	p->setDamage(player->getWeaponDamage());
 
 	if (player->bullet_count == 0)
 	{
 		player->setWeapon(0);
 	}
 
-	game->GetObjects().push_back(p);
+	
 }
 
 

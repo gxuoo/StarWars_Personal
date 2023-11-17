@@ -139,6 +139,30 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 			Print("¡Û");
 			break;
 		case ObjectType::PARTICLE :
+			if (((Particle*)*it)->isMelee)
+			{
+				if (((Particle*)*it)->getDamage() <= 5)//fist
+				{
+					if((*it)->GetVelocity().getX() >= 0)
+						Print(" @");
+					else
+						Print("@ ");
+				}
+				else
+				{
+					if ((*it)->GetVelocity().getX() >= 0)
+						Print("\\\\");
+					else
+						Print("//");
+				}
+				break;
+			}
+			if (((Particle*)*it)->isShotgun)
+			{
+				Print("¡Å");
+				break;
+			}
+
 			if (((Particle*)*it)->getDamage() <= 5)
 			{
 				Print("¡¤");

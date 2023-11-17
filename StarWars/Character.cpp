@@ -4,8 +4,6 @@
 Character::Character() : Object() 
 {
 	weapon_id = 0;
-	weapon_damage = DroppedWeapon::getDamage(weapon_id);
-	weapon_speed = DroppedWeapon::getSpeed(weapon_id);
 	isFreeze = false;
 	health = 100;
 	buff_timer = 0;
@@ -21,8 +19,6 @@ Character::Character() : Object()
 void Character::setWeapon(int weapon_id) 
 {
 	this->weapon_id = weapon_id;
-	weapon_damage = DroppedWeapon::getDamage(weapon_id);
-	weapon_speed = DroppedWeapon::getSpeed(weapon_id);
 	bullet_count = DroppedWeapon::getBulletCount(weapon_id);
 }
 
@@ -52,8 +48,19 @@ std::string Character::getWeaponName()
 	{
 	case 1 :
 		return "±ÇÃÑ";
+		break;
 	case 2 :
 		return "µ¹°Ý¼ÒÃÑ";
+		break;
+	case 3:
+		return "°Ë";
+		break;
+	case 4:
+		return "¼¦°Ç";
+		break;
+	case 5:
+		return "Àú°ÝÃÑ";
+		break;
 	default :
 		return "ÁÖ¸Ô";
 	}
@@ -65,8 +72,10 @@ std::string Character::getBuffName()
 	{
 	case 1:
 		return "¼Óµµ x1.5";
+		break;
 	case 2:
 		return "¾ó·ÁÁü!";
+		break;
 	default:
 		return "¾øÀ½";
 	}
@@ -89,20 +98,30 @@ int Character::getHealth()
 
 int Character::getWeaponSpeed()
 {
-	return weapon_speed;
+	return DroppedWeapon::getSpeed(weapon_id);
 }
 
 int Character::getWeaponDamage()
 {
-	return weapon_damage;
+	return DroppedWeapon::getDamage(weapon_id);
 }
 
-void Character::setWeaponSpeed(int weapon_speed)
+int Character::getWeaponRPM()
 {
-	this->weapon_speed = weapon_speed;
+	return DroppedWeapon::getRPM(weapon_id);
 }
 
-void Character::setWeaponDamage(int weapon_damage)
+int Character::getWeaponMaxRange()
 {
-	this->weapon_damage = weapon_damage;
+	return DroppedWeapon::getMaxRange(weapon_id);
+}
+
+bool Character::isWeaponMelee()
+{
+	return DroppedWeapon::isMelee(weapon_id);
+}
+
+bool Character::isWeaponShotgun()
+{
+	return DroppedWeapon::isShotgun(weapon_id);
 }

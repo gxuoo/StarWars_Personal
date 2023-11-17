@@ -137,7 +137,7 @@ void Game::UpdateObjects()
 						break;
 					}
 
-					if (it2->IsCharacter())
+					if (it2->IsCharacter() && ((Particle *)it)->shooter != it2)
 					{
 						(dynamic_cast<Character*>(it2))->giveDamage((dynamic_cast<Particle*>(it))->getDamage());
 
@@ -147,6 +147,19 @@ void Game::UpdateObjects()
 						break;
 					}
 				}
+			}
+		}
+
+		if (it->getObjectType() == ObjectType::PARTICLE)
+		{
+			if (((Particle*)it)->cur_range >= ((Particle*)it)->max_range)
+			{
+				it->SetDeleteObject(true);
+				should_delete = true;
+			}
+			else
+			{
+				((Particle*)it)->cur_range++;
 			}
 		}
 

@@ -21,8 +21,10 @@ public:
 	int getHealth();
 	int getWeaponSpeed();
 	int getWeaponDamage();
-	void setWeaponSpeed(int weapon_speed);
-	void setWeaponDamage(int weapon_damage);
+	int getWeaponRPM();
+	int getWeaponMaxRange();
+	bool isWeaponMelee();
+	bool isWeaponShotgun();
 	bool isFreeze = false;
 	int direction;
 	int bullet_count;
@@ -34,8 +36,6 @@ protected:
 	int speed;
 	int health;
 	int weapon_id;
-	int weapon_damage;
-	int weapon_speed;
 	int buff_timer;
 };
 
