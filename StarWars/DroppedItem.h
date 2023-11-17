@@ -9,7 +9,7 @@ class DroppedItem : public Object {
 public:
 	DroppedItem();
 	~DroppedItem() = default;
-	virtual void useItem(Object* itemuser, Object* elseuser) = 0;
+	virtual void useItem(Object* itemuser, Object* elseuser, vector< Object*>& objects) = 0;
 protected:
 };
 

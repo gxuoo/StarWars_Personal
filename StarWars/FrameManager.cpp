@@ -163,6 +163,12 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 				break;
 			}
 
+			if (((Particle*)*it)->isBombing)
+			{
+				Print("@");
+				break;
+			}
+
 			if (((Particle*)*it)->getDamage() <= 5)
 			{
 				Print("¡¤");

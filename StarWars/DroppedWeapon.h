@@ -18,7 +18,7 @@ public:
 	static int getMaxRange(int weapon_id);
 	static bool isMelee(int weapon_id);
 	static bool isShotgun(int weapon_id);
-	void useItem(Object* itemuser, Object* elseuser);
+	void useItem(Object* itemuser, Object* elseuser, vector< Object*>& objects);
 private:
 	int weapon_id;
 	int damage;

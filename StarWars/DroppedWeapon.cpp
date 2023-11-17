@@ -160,7 +160,7 @@ bool DroppedWeapon::isShotgun(int weapon_id)
 	}
 }
 
-void DroppedWeapon::useItem(Object* itemuser, Object* elseuser) {
+void DroppedWeapon::useItem(Object* itemuser, Object* elseuser, vector< Object*>& objects) {
 	((Character*)itemuser)->setWeapon(weapon_id);
 }
 

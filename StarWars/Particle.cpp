@@ -10,6 +10,7 @@ Particle::Particle() :Object()
 	cur_range = 0;
 	isMelee = false;
 	isShotgun = false;
+	isBombing = false;
 }
 
 void Particle::setDamage(const int damage) 
