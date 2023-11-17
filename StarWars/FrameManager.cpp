@@ -108,7 +108,10 @@ COORD FrameManager::GetCursorPosition()
 void FrameManager::MakeFrame(std::vector<Object*>& objects)
 {
 	SetCursorPosition({ (short)((objects[0])->GetCoord().getX() * 2), (short)(20 - (objects[0])->GetCoord().getY()) });
-	SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 12);
+	if (((PlayerCharacter*)objects[0])->isFreeze == true)
+		SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 9);
+	else
+		SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 12);
 	Print("бр");
 
 	SetCursorPosition({ (short)((objects[0])->GetCoord().getX() * 2), (short)(20 - (objects[0])->GetCoord().getY() - 1) });
@@ -118,7 +121,12 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 		Print("в┼");
 
 	SetCursorPosition({ (short)((objects[1])->GetCoord().getX() * 2), (short)(20 - (objects[1])->GetCoord().getY()) });
-	SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 14);
+	
+	if (((PlayerCharacter*)objects[1])->isFreeze == true)
+		SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 9);
+	else
+		SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 14);
+	
 	Print("бр");
 
 	SetCursorPosition({ (short)((objects[1])->GetCoord().getX() * 2), (short)(20 - (objects[1])->GetCoord().getY() - 1) });
