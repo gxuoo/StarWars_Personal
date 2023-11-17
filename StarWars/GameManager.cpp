@@ -34,6 +34,7 @@ void GameManager::MakeItem()
 	DroppedWeapon* weapon1 = new DroppedWeapon(4);
 	DroppedWeapon* weapon2 = new DroppedWeapon(5);
 	DroppedWeapon* weapon3 = new DroppedWeapon(3);
+	DroppedWeapon* weapon4 = new DroppedWeapon(6);
 
 	DroppedSpecialItem* item1 = new DroppedSpecialItem(2);
 	DroppedSpecialItem* item2 = new DroppedSpecialItem(1);
@@ -42,9 +43,11 @@ void GameManager::MakeItem()
 	((Object*)weapon1)->SetCoord({ 15, 1 });
 	((Object*)weapon2)->SetCoord({ 10, 4 });
 	((Object*)weapon3)->SetCoord({10, 10 });
+	((Object*)weapon4)->SetCoord({ 30, 1 });
 	((Object*)weapon1)->SetNextCoord({ 15, 1 });
 	((Object*)weapon2)->SetNextCoord({ 10, 5 });
 	((Object*)weapon3)->SetNextCoord({ 20, 10 });
+	((Object*)weapon4)->SetNextCoord({ 30, 1 });
 	((Object*)item1)->SetCoord({ 23, 4 });
 	((Object*)item1)->SetNextCoord({ 23, 4 });
 	((Object*)item2)->SetCoord({ 25, 8 });
@@ -55,6 +58,7 @@ void GameManager::MakeItem()
 	this->game->GetObjects().push_back(((Object*)weapon1));
 	this->game->GetObjects().push_back(((Object*)weapon2));
 	this->game->GetObjects().push_back(((Object*)weapon3));
+	this->game->GetObjects().push_back(((Object*)weapon4));
 	this->game->GetObjects().push_back(((Object*)item1));
 	this->game->GetObjects().push_back(((Object*)item2));
 	this->game->GetObjects().push_back(((Object*)item3));
@@ -225,6 +229,7 @@ void GameManager::PlayerShoot(PlayerCharacter* player)
 		p->max_range = player->getWeaponMaxRange();
 		p->isMelee = player->isWeaponMelee();
 		p->isShotgun = player->isWeaponShotgun();
+		p->isHatoken = player->isWeaponHatoken();
 
 		if (player->direction >= 0)
 		{

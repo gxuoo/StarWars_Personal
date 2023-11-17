@@ -47,7 +47,7 @@ void DroppedSpecialItem::useItem(Object* itemuser, Object* elseuser, vector< Obj
 			p->max_range = 50;
 			p->SetCoord({ dist(gen), 19});
 			p->SetNextCoord(p->GetCoord() + Vec2{ 1, -1 });
-			p->SetVelocity(Vec2{ 2, -1 });
+			p->SetVelocity(Vec2{ 1, -1 });
 
 			objects.push_back(p);
 		}
@@ -62,7 +62,7 @@ void DroppedSpecialItem::useItem(Object* itemuser, Object* elseuser, vector< Obj
 			p->max_range = 50;
 			p->SetCoord({ dist(gen) + 20, 19 });
 			p->SetNextCoord(p->GetCoord() + Vec2{ -1, -1 });
-			p->SetVelocity(Vec2{ -2, -1 });
+			p->SetVelocity(Vec2{ -1, -1 });
 
 			objects.push_back(p);
 		}

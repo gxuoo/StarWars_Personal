@@ -33,6 +33,9 @@ int DroppedWeapon::getDamage(int weapon_id)
 	case 5 ://sniper
 		return 20;
 		break;
+	case 6://Hatoken
+		return 10;
+		break;
 	default://fist
 		return 3;
 		break;
@@ -57,6 +60,9 @@ int DroppedWeapon::getSpeed(int weapon_id)
 		break;
 	case 5://sniper
 		return 20;
+		break;
+	case 6:
+		return 4;
 		break;
 	default://fist
 		return 1;
@@ -83,6 +89,9 @@ int DroppedWeapon::getBulletCount(int weapon_id)
 	case 5://sniper
 		return 10;
 		break;
+	case 6://Hatoken
+		return 10;
+		break;
 	default :
 		return 0;
 	}
@@ -106,6 +115,9 @@ int DroppedWeapon::getRPM(int weapon_id)
 		break;
 	case 5://sniper
 		return 2;
+		break;
+	case 6://Hatoken 
+		return 5;
 		break;
 	default://fist
 		return 5;
@@ -132,6 +144,9 @@ int DroppedWeapon::getMaxRange(int weapon_id)
 	case 5://sniper
 		return 40;
 		break;
+	case 6://Hatoken
+		return 10;
+		break;
 	default://fist
 		return 0;
 		break;
@@ -156,6 +171,17 @@ bool DroppedWeapon::isShotgun(int weapon_id)
 	case 4 :
 		return true;
 	default :
+		return false;
+	}
+}
+
+bool DroppedWeapon::isHatoken(int weapon_id)
+{
+	switch (weapon_id)
+	{
+	case 6:
+		return true;
+	default:
 		return false;
 	}
 }

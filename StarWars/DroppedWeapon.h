@@ -18,6 +18,7 @@ public:
 	static int getMaxRange(int weapon_id);
 	static bool isMelee(int weapon_id);
 	static bool isShotgun(int weapon_id);
+	static bool isHatoken(int weapon_id);
 	void useItem(Object* itemuser, Object* elseuser, vector< Object*>& objects);
 private:
 	int weapon_id;
@@ -25,7 +26,7 @@ private:
 	int speed;
 	int RPM;
 	int max_range;
-	const int TOTAL_WEAPON = 3;// 0 : ¡÷∏‘, 1 : ±«√—, 2 : µπ∞›º“√—
+	const int TOTAL_WEAPON = 7;// 0 : ¡÷∏‘, 1 : ±«√—, 2 : µπ∞›º“√—
 };
 
 #endif

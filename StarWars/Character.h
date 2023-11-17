@@ -25,6 +25,7 @@ public:
 	int getWeaponMaxRange();
 	bool isWeaponMelee();
 	bool isWeaponShotgun();
+	bool isWeaponHatoken();
 	bool isFreeze = false;
 	int direction;
 	int bullet_count;

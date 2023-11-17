@@ -61,6 +61,9 @@ std::string Character::getWeaponName()
 	case 5:
 		return "¿˙∞›√—";
 		break;
+	case 6:
+		return "¿Â«≥";
+		break;
 	default :
 		return "¡÷∏‘";
 	}
@@ -124,4 +127,9 @@ bool Character::isWeaponMelee()
 bool Character::isWeaponShotgun()
 {
 	return DroppedWeapon::isShotgun(weapon_id);
+}
+
+bool Character::isWeaponHatoken()
+{
+	return DroppedWeapon::isHatoken(weapon_id);
 }

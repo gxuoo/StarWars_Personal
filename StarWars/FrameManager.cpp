@@ -169,6 +169,15 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 				break;
 			}
 
+			if (((Particle*)*it)->isHatoken)
+			{
+				if ((*it)->GetVelocity().getX() >= 0)
+					Print("))");
+				else
+					Print("((");
+				break;
+			}
+
 			if (((Particle*)*it)->getDamage() <= 5)
 			{
 				Print("¡¤");

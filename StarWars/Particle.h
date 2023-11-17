@@ -17,6 +17,7 @@ public:
 	bool isMelee;
 	bool isShotgun;
 	bool isBombing;
+	bool isHatoken;
 private:
 	int damage;//1~5 : Low, 6 ~ 10 Mid, 11 ~ High
 };
