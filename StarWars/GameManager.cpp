@@ -219,7 +219,7 @@ void GameManager::PlayerShoot(PlayerCharacter* player)
 		player->bullet_count -= 1;
 	player->last_shot = milli;
 
-	for (int i = 0; i < (player->isWeaponShotgun() ? 3 : 1); i++)
+	for (int i = 0; i < (player->isWeaponShotgun() ? 2 : 1); i++)
 	{
 		Particle* p = new Particle();
 

@@ -80,7 +80,14 @@ void Game::UpdateObjects()
 			{
 				PlayerCharacter* player = (PlayerCharacter*)objects[i];
 
-				if (player->GetVelocity().getY() <= 0 && (it2->getObjectType() == ObjectType::WALL) && (player->GetCoord() + Vec2(0, -1) == it2->GetCoord()))
+				if (	player->GetVelocity().getY() <= 0  
+						&&	
+						( 
+							(it2->getObjectType() == ObjectType::WALL) && (player->GetCoord() + Vec2(0, -1) == it2->GetCoord())
+							|| 
+							(it2->IsCharacter()) && (player->GetCoord() + Vec2(0, -2) == it2->GetCoord()) 
+						) 
+					)
 				{
 					player->GetVelocity().setY(0);
 					player->is_mid_air = false;
@@ -89,14 +96,15 @@ void Game::UpdateObjects()
 				}
 			}
 		}
+		
 
 		for (auto& it2 : objects)
 		{
 			if (it != it2 && it->IsCollisionWith(it2))
 			{
-				if (it->IsCharacter() && it2->getObjectType() == ObjectType::WALL)
+				if (it->IsCharacter() && (it2->getObjectType() == ObjectType::WALL || it2->IsCharacter()))
 				{
-					if (it->GetNextCoord() == it2->GetCoord())
+					if (it->GetNextCoord() == it2->GetCoord() || it->GetNextCoord() + Vec2(0,1) == it2->GetCoord() || it->GetNextCoord() + Vec2(0, -1) == it2->GetCoord())
 						it->GetVelocity().setX(0);
 
 					if (it->GetCoord().getY() + 2 == it2->GetCoord().getY())
@@ -105,12 +113,13 @@ void Game::UpdateObjects()
 
 						player->setJumpTimer(player->getJumpLimit());
 						it->SetNextCoord(it->GetCoord());
-						
+					
 						break;
 					}
 
-					UpdateObjectNextPosition(it);
+				UpdateObjectNextPosition(it);
 				}
+
 				if (it2->IsCharacter() && it->IsItem())
 				{
 					if (it2 == objects[0])
