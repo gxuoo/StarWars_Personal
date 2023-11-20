@@ -33,8 +33,8 @@ void DroppedSpecialItem::useItem(Object* itemuser, Object* elseuser, vector< Obj
 		((Character*)elseuser)->current_buff = 2;
 		break;
 	case 3:
-		random_device rd;   // non-deterministic generator
-		mt19937 gen(rd());  // to seed mersenne twister.
+		random_device rd;
+		mt19937 gen(rd());
 		uniform_int_distribution<> dist(1, 20);
 
 		for (int i = 0; i < 10; i++)

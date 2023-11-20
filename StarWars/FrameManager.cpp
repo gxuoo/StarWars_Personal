@@ -206,13 +206,6 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 	}
 
 	drawStatus((Character*)objects[0], (Character*)objects[1]);
-
-	SetCursorPosition({ 10, 10 });
-	std::string str = std::to_string(((PlayerCharacter*)objects[0])->current_buff);
-	//std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getX()) + " " + std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getY());
-	Print(str.c_str());
-
-	
 }
 
 void FrameManager::drawStatus(Character* player1, Character* player2)

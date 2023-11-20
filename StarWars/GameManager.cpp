@@ -3,6 +3,27 @@
 GameManager::GameManager()
 {
 	this->game = new Game(false);
+	this->last_item_SpawnTime = 0;
+}
+
+void GameManager::MakeMap()
+{
+	for (int y = 0; y < game->HEIGHT; ++y)
+	{
+		for (int x = 0; x < game->WIDTH; ++x)
+		{
+			if (Game::map[game->HEIGHT - 1 - y][x] == 1)
+			{
+				Wall* wall = new Wall();
+
+				wall->SetCoord({ x, y });
+				wall->SetNextCoord(wall->GetCoord());
+
+				game->GetObjects().push_back(wall);
+				Game::Curmap[y][x] = 1;
+			}
+		}
+	}
 }
 
 void GameManager::MakePlayer()
@@ -12,7 +33,7 @@ void GameManager::MakePlayer()
 
 	this->game->GetObjects().push_back(player1);
 	this->game->GetObjects().push_back(player2);
-	
+
 	player1->SetCoord({ 10, 1 });
 	player2->SetCoord({ 25, 1 });
 
@@ -27,102 +48,45 @@ void GameManager::MakePlayer()
 
 	player1->setWeapon(1);
 	player2->setWeapon(2);
+
+	Game::Curmap[player1->GetCoord().getY()][player1->GetCoord().getX()] = 2;
+	Game::Curmap[player1->GetCoord().getY() + 1][player1->GetCoord().getX()] = 2;
+	Game::Curmap[player2->GetCoord().getY()][player2->GetCoord().getX()] = 2;
+	Game::Curmap[player2->GetCoord().getY() + 1][player2->GetCoord().getX()] = 2;
 }
 
 void GameManager::MakeItem()
 {
-	DroppedWeapon* weapon1 = new DroppedWeapon(4);
-	DroppedWeapon* weapon2 = new DroppedWeapon(5);
-	DroppedWeapon* weapon3 = new DroppedWeapon(3);
-	DroppedWeapon* weapon4 = new DroppedWeapon(6);
+	random_device rd_variable;
+	mt19937 generate(rd_variable());
+	uniform_int_distribution<> IsItem(0, 1), SetWeapon(1, 6), SetSpecialItem(0, 3);
+	int Item = IsItem(generate);
 
-	DroppedSpecialItem* item1 = new DroppedSpecialItem(2);
-	DroppedSpecialItem* item2 = new DroppedSpecialItem(1);
-	DroppedSpecialItem* item3 = new DroppedSpecialItem(3);
-
-	((Object*)weapon1)->SetCoord({ 15, 1 });
-	((Object*)weapon2)->SetCoord({ 10, 4 });
-	((Object*)weapon3)->SetCoord({10, 10 });
-	((Object*)weapon4)->SetCoord({ 30, 1 });
-	((Object*)weapon1)->SetNextCoord({ 15, 1 });
-	((Object*)weapon2)->SetNextCoord({ 10, 5 });
-	((Object*)weapon3)->SetNextCoord({ 20, 10 });
-	((Object*)weapon4)->SetNextCoord({ 30, 1 });
-	((Object*)item1)->SetCoord({ 23, 4 });
-	((Object*)item1)->SetNextCoord({ 23, 4 });
-	((Object*)item2)->SetCoord({ 25, 8 });
-	((Object*)item2)->SetNextCoord({ 25, 8 });
-	((Object*)item3)->SetCoord({ 28, 1 });
-	((Object*)item3)->SetNextCoord({ 28, 1 });
-
-	this->game->GetObjects().push_back(((Object*)weapon1));
-	this->game->GetObjects().push_back(((Object*)weapon2));
-	this->game->GetObjects().push_back(((Object*)weapon3));
-	this->game->GetObjects().push_back(((Object*)weapon4));
-	this->game->GetObjects().push_back(((Object*)item1));
-	this->game->GetObjects().push_back(((Object*)item2));
-	this->game->GetObjects().push_back(((Object*)item3));
-}
-
-void GameManager::MakeWall()
-{
-	for (int i = 0; i < game->WIDTH; ++i)
+	for (int i = 0; i < 3; i++)
 	{
-		Wall* w = new Wall();
-
-		w->SetCoord({ i, 0 });
-		w->SetNextCoord({ i, 0 });
-
-		Wall* w2 = new Wall();
-		w2->SetCoord({ i, game->HEIGHT - 1 });
-		w2->SetNextCoord({ i, game->HEIGHT - 1 });
-
-		this->game->GetObjects().push_back(w);
-		this->game->GetObjects().push_back(w2);
-	}
-
-	for (int i = 1; i < game->HEIGHT - 1; ++i)
-	{
-		Wall* w = new Wall();
-
-		w->SetCoord({ 0, i });
-		w->SetNextCoord({ 0, i });
-
-		Wall* w2 = new Wall();
-		w2->SetCoord({ game->WIDTH - 1, i });
-		w2->SetNextCoord({ game->WIDTH - 1, i });
-
-		this->game->GetObjects().push_back(w);
-		this->game->GetObjects().push_back(w2);
-	}
-}
-
-void GameManager::MakeMap()
-{
-	for (int y = 1; y < game->HEIGHT - 1; ++y)
-	{
-		for (int x = 1; x < game->WIDTH - 1; ++x)
+		if (!Item)		// Item == 0 이면 무기
 		{
-			if (Game::map[game->HEIGHT - y - 1][x ] == 1)
-			{
-				Wall* wall = new Wall();
-
-				wall->SetCoord({ x, y });
-				wall->SetNextCoord(wall->GetCoord());
-
-				game->GetObjects().push_back(wall);
-			}
+			DroppedWeapon* weapon = new DroppedWeapon(SetWeapon(generate));
+			((Object*)weapon)->SetCoord(SetItemCoord());
+			((Object*)weapon)->SetNextCoord(((Object*)weapon)->GetCoord());
+			this->game->GetObjects().push_back(((Object*)weapon));
+		}
+		else			// Item == 1 이면 특수 아이템
+		{
+			DroppedSpecialItem* item = new DroppedSpecialItem(SetSpecialItem(generate));
+			((Object*)item)->SetCoord(SetItemCoord());
+			((Object*)item)->SetNextCoord(((Object*)item)->GetCoord());
+			this->game->GetObjects().push_back(((Object*)item));
 		}
 	}
 }
 
+
 void GameManager::StartGame()
 {
 	this->frameManager.InitFrame();
-	
+
 	MakePlayer();
-	MakeWall();
-	MakeItem();
 	MakeMap();
 	while (PrecedeGame()) 
 	{
@@ -141,6 +105,13 @@ bool GameManager::PrecedeGame()
 {
 	if (!this->game->IsGameOver())
 	{
+		auto milli = GetTickCount64();
+		if (last_item_SpawnTime + spawn_term < milli)
+		{
+			last_item_SpawnTime = milli;
+			MakeItem();
+		}
+
 		this->game->UpdateObjects();
 		return true;
 	}
@@ -258,4 +229,64 @@ void GameManager::PlayerShoot(PlayerCharacter* player)
 	
 }
 
+Vec2 GameManager::SetItemCoord()
+{
+	random_device rd_variable;
+	mt19937 generate(rd_variable());
+	uniform_int_distribution<> XCoord(1, 39), YCoord(1, 18), SetWay(1, 4);
+	int Way = SetWay(generate);
 
+	Vec2 coord(XCoord(generate), YCoord(generate));
+
+	if (Game::Curmap[coord.getY()][coord.getX()] == 0)
+	{
+		Game::Curmap[coord.getY()][coord.getX()] = 3;
+		return coord;
+	}
+
+	else
+	{
+		while (Game::Curmap[coord.getY()][coord.getX()] != 0)
+		{
+			if (Way == 1)		// 상
+			{
+				coord.setY(coord.getY() + 1);
+				if (coord.getY() >= 19)
+				{
+					coord.setY(18);
+					Way = SetWay(generate);
+				}
+			}
+			if (Way == 2)		// 하
+			{
+				coord.setY(coord.getY() - 1);
+				if (coord.getY() <= 0)
+				{
+					coord.setY(1);
+					Way = SetWay(generate);
+				}
+			}
+			if (Way == 3)		// 좌
+			{
+				coord.setX(coord.getX() - 1);
+				if (coord.getX() <= 0)
+				{
+					coord.setX(1);
+					Way = SetWay(generate);
+				}
+			}
+			if (Way == 4)		// 우
+			{
+				coord.setX(coord.getX() + 1);
+				if (coord.getX() >= 40)
+				{
+					coord.setX(39);
+					Way = SetWay(generate);
+				}
+			}
+		}
+		Game::Curmap[coord.getY()][coord.getX()] = 3;
+		return coord;
+	}
+	
+}
