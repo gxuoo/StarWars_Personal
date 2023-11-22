@@ -34,6 +34,10 @@ void Game::UpdateObjects()
 	{
 		if (it->last_updated + (1000.0 / it->GetSpeed()) > milli)
 			continue;
+		if (it->getObjectType() == ObjectType::PARTICLE)
+		{
+			it->last_updated = milli;
+		}
 
 		if (it->getObjectType() == ObjectType::PLAYER_CHARACTER)
 		{
@@ -120,17 +124,17 @@ void Game::UpdateObjects()
 				UpdateObjectNextPosition(it);
 				}
 
-				if (it2->IsCharacter() && it->IsItem())
+				if (it->IsCharacter() && it2->IsItem())
 				{
-					if (it2 == objects[0])
+					if (it == objects[0])
 					{
-						((DroppedItem*)it)->useItem(objects[0], objects[1], Game::GetObjects());
+						((DroppedItem*)it2)->useItem(objects[0], objects[1], Game::GetObjects());
 					}
 					else
 					{
-						((DroppedItem*)it)->useItem(objects[1], objects[0], Game::GetObjects());
+						((DroppedItem*)it2)->useItem(objects[1], objects[0], Game::GetObjects());
 					}
-					it->SetDeleteObject(true);
+					it2->SetDeleteObject(true);
 					should_delete = true;
 
 					break;

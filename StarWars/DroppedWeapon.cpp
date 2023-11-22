@@ -47,25 +47,25 @@ int DroppedWeapon::getSpeed(int weapon_id)
 	switch (weapon_id)
 	{
 	case 1://pistol
-		return 3;
+		return 25;
 		break;
 	case 2://rifle
-		return  6;
+		return 40;
 		break;
 	case 3://sword
-		return 1;
+		return 25;
 		break;
 	case 4://shotgun
-		return 4;
+		return 30;
 		break;
 	case 5://sniper
-		return 20;
+		return 1000;
 		break;
 	case 6:
-		return 4;
+		return 30;
 		break;
 	default://fist
-		return 1;
+		return 25;
 		break;
 	}
 }

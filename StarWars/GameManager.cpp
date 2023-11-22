@@ -46,8 +46,8 @@ void GameManager::MakePlayer()
 	player1->SetSpeed(20);
 	player2->SetSpeed(20);
 
-	player1->setWeapon(1);
-	player2->setWeapon(2);
+	player1->setWeapon(2);
+	player2->setWeapon(5);
 
 	Game::Curmap[player1->GetCoord().getY()][player1->GetCoord().getX()] = 2;
 	Game::Curmap[player1->GetCoord().getY() + 1][player1->GetCoord().getX()] = 2;
