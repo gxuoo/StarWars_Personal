@@ -273,9 +273,6 @@ bool Game::isOutOfMap(Object* obj)
 	{
 		return false;
 	}
-
-
-
 }
 
 const int Game::map[20][41] = {
