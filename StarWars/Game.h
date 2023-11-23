@@ -6,6 +6,7 @@
 #include "Particle.h"
 #include "DroppedItem.h"
 #include "PlayerCharacter.h"
+#include "Wall.h"
 
 #ifndef GAME_HPP
 #define GAME_HPP
@@ -18,6 +19,7 @@ public:
 	void UpdateObjectNextPosition(Object *);
 	void UpdateObjectPosition();
 	void UpdateObjects();
+	bool isOutOfMap(Object * obj);
 	std::vector<Object*>& GetObjects();
 	const int WIDTH = 41;
 	const int HEIGHT = 20;

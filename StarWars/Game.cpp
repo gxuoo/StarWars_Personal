@@ -134,6 +134,7 @@ void Game::UpdateObjects()
 					{
 						((DroppedItem*)it2)->useItem(objects[1], objects[0], Game::GetObjects());
 					}
+					Curmap[it2->GetCoord().getY()][it2->GetCoord().getX()] = 0;
 					it2->SetDeleteObject(true);
 					should_delete = true;
 
@@ -146,6 +147,14 @@ void Game::UpdateObjects()
 					{
 						it->SetDeleteObject(true);
 						should_delete = true;
+
+						((Wall*)it2)->giveDamage(((Particle*)it)->getDamage());
+						if (((Wall*)it2)->getHealth() <= 0)
+						{
+							Curmap[it2->GetCoord().getY()][it2->GetCoord().getX()] = 0;
+							it2->SetDeleteObject(true);
+							should_delete = true;
+						}
 
 						break;
 					}
@@ -175,6 +184,20 @@ void Game::UpdateObjects()
 				((Particle*)it)->cur_range++;
 			}
 		}
+
+		if (isOutOfMap(it))
+		{
+			if (it->IsCharacter())
+			{
+				((Character*)it)->setHealth(0);
+			}
+			else
+			{
+				it->SetDeleteObject(true);
+				should_delete = true;
+			}
+		}
+
 
 		if (it->getObjectType() == ObjectType::PLAYER_CHARACTER && ((Character *)it)->getHealth() <= 0)
 		{
@@ -210,12 +233,53 @@ void Game::UpdateObjectPosition()
 	if (player2->GetCoord() != player2->GetNextCoord())
 		player2->setJumpTimer(player2->getJumpTimer() + 1);
 
+	Curmap[player1->GetCoord().getY()][player1->GetCoord().getX()] = 0;
+	Curmap[player2->GetCoord().getY()][player2->GetCoord().getX()] = 0;
+	Curmap[player1->GetCoord().getY() + 1][player1->GetCoord().getX()] = 0;
+	Curmap[player2->GetCoord().getY() + 1][player2->GetCoord().getX()] = 0;
+
 	for (std::vector<Object*>::iterator it = objects.begin(); it < objects.end(); ++it)
 		(*it)->SetCoord((*it)->GetNextCoord());
+
+	Curmap[player1->GetCoord().getY()][player1->GetCoord().getX()] = 2;
+	Curmap[player2->GetCoord().getY()][player2->GetCoord().getX()] = 2;
+	Curmap[player1->GetCoord().getY() + 1][player1->GetCoord().getX()] = 2;
+	Curmap[player2->GetCoord().getY() + 1][player2->GetCoord().getX()] = 2;
+}
+
+bool Game::isOutOfMap(Object* obj)
+{
+	if (obj->GetNextCoord().getY() >= Game::HEIGHT)
+	{
+		return true;
+	}
+	else if (obj->GetNextCoord().getY() < 0)
+	{
+		return true;
+	}
+	else if (obj->GetNextCoord().getX() < 0)
+	{
+		return true;
+	}
+	else if (obj->GetNextCoord().getX() >= Game::WIDTH)
+	{
+		return true;
+	}
+	else if (obj->IsCharacter() && obj->GetNextCoord().getY() + 1 >= Game::HEIGHT)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+
+
 }
 
 const int Game::map[20][41] = {
-	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -230,11 +294,11 @@ const int Game::map[20][41] = {
 	{1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} };
+	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} };
 
 int Game::Curmap[20][41] = {
 	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
