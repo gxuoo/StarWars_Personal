@@ -12,7 +12,7 @@ void GameManager::MakeMap()
 	{
 		for (int x = 0; x < game->WIDTH; ++x)
 		{
-			if (Game::map[game->HEIGHT - 1 - y][x] == 1)
+			if (Game::map[0][game->HEIGHT - 1 - y][x] == 1)
 			{
 				Wall* wall = new Wall();
 
@@ -34,11 +34,11 @@ void GameManager::MakePlayer()
 	this->game->GetObjects().push_back(player1);
 	this->game->GetObjects().push_back(player2);
 
-	player1->SetCoord({ 10, 1 });
-	player2->SetCoord({ 25, 1 });
+	player1->SetCoord({ 10, 15 });
+	player2->SetCoord({ 30, 15 });
 
-	player1->SetNextCoord({ 10, 1 });
-	player2->SetNextCoord({ 25, 1 });
+	player1->SetNextCoord({ 10, 15 });
+	player2->SetNextCoord({ 30, 15 });
 
 	player1->SetVelocity({ -1, 0 });
 	player2->SetVelocity({ 1, 0 });
