@@ -3,6 +3,7 @@
 #include "Frame.h"
 #include "Object.h"
 #include "PlayerCharacter.h"
+#include "EnemyNPC.h"
 
 #ifndef FRAME_MANAGER_HPP
 #define FRAME_MANAGER_HPP
@@ -20,7 +21,7 @@ public:
 	void SetCursorPosition(COORD);
 	COORD GetCursorPosition();
 	void MakeFrame(std::vector<Object*>&);
-	void drawStatus(Character* player1, Character* player2);
+	void drawStatus(PlayerCharacter* player1, PlayerCharacter* player2);
 private:
 	Frame frame;
 };

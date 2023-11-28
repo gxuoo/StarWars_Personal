@@ -24,6 +24,7 @@ public:
 	Vec2 SetItemCoord();
 	int last_item_SpawnTime;
 	const static int spawn_term = 15000;
+	int stage = 0;
 private:
 	FrameManager frameManager;
 	Game* game;

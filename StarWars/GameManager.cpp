@@ -8,11 +8,16 @@ GameManager::GameManager()
 
 void GameManager::MakeMap()
 {
+	int random = rand() % 3;
+
+	if (this->stage > 2)
+		this->stage = 2;
+
 	for (int y = 0; y < game->HEIGHT; ++y)
 	{
 		for (int x = 0; x < game->WIDTH; ++x)
 		{
-			if (Game::map[0][game->HEIGHT - 1 - y][x] == 1)
+			if (Game::map[stage][game->HEIGHT - 1 - y][x] == 1)
 			{
 				Wall* wall = new Wall();
 
@@ -88,11 +93,9 @@ void GameManager::StartGame()
 
 	MakePlayer();
 	MakeMap();
-	while (PrecedeGame()) 
+	while (PrecedeGame())
 	{
 		this->GetPlayerKeyInput();
-		
-
 
 		this->frameManager.MakeFrame(this->game->GetObjects());
 		this->frameManager.UpdateFrame();
@@ -112,7 +115,86 @@ bool GameManager::PrecedeGame()
 			MakeItem();
 		}
 
-		this->game->UpdateObjects();
+		if (!this->game->IsStageOver())
+			this->game->UpdateObjects();
+
+		else
+		{
+			/*if (this->game->GetBoss() == nullptr)
+			{
+				this->game->GetObjects()[0]->SetCoord({ 10, 1 });
+				this->game->GetObjects()[0]->SetNextCoord({ 10, 1 });
+				this->game->GetObjects()[1]->SetCoord({ 30, 1 });
+				this->game->GetObjects()[1]->SetNextCoord({ 30, 1 });
+
+				((PlayerCharacter*)this->game->GetObjects()[0])->setHealth(100);
+				((PlayerCharacter*)this->game->GetObjects()[1])->setHealth(100);
+
+				for (int i = 0; i < 20; ++i)
+				{
+					Wall* wall = new Wall();
+					wall->SetCoord({ 20, i });
+					wall->SetNextCoord({ 20, i });
+
+					Game::map[0][i][20] = 1;
+
+					game->GetObjects().push_back(wall);
+				}
+
+				EnemyNPC* enemy = new EnemyNPC();
+				enemy->SetCoord({ 1, 1 });
+				enemy->SetNextCoord({ 1, 1 });
+				enemy->setHealth(50);
+				enemy->SetSpeed(5);
+
+				this->game->SetBoss(enemy);
+				this->game->GetObjects().push_back(enemy);
+				this->game->UpdateObjects();
+				this->game->SetStageOver(false);
+			}
+
+			else
+			{
+				for (int i = 0; i < 20; ++i)
+					Game::map[0][i][20] = 0;
+			}*/
+
+			this->game->GetObjects()[0]->SetCoord({ 10, 1 });
+			this->game->GetObjects()[0]->SetNextCoord({ 10, 1 });
+			this->game->GetObjects()[1]->SetCoord({ 30, 1 });
+			this->game->GetObjects()[1]->SetNextCoord({ 30, 1 });
+
+			this->stage += 1;
+
+			if (((PlayerCharacter*)this->game->GetObjects()[0])->getHealth() <= 0)
+			{
+				((PlayerCharacter*)this->game->GetObjects()[0])->setHealth(100);
+				((PlayerCharacter*)this->game->GetObjects()[0])->life -= 1;
+			}
+
+			if (((PlayerCharacter*)this->game->GetObjects()[1])->getHealth() <= 0)
+			{
+				((PlayerCharacter*)this->game->GetObjects()[1])->setHealth(100);
+				((PlayerCharacter*)this->game->GetObjects()[1])->life -= 1;
+			}
+
+			this->game->SetStageOver(false);
+
+			for (int i = 2; i < this->game->GetObjects().size(); ++i)
+			{
+				delete (this->game->GetObjects()[i]);
+				this->game->GetObjects().erase(this->game->GetObjects().begin() + i);
+
+				--i;
+			}
+
+
+			MakeMap();
+
+			this->game->UpdateObjects();
+
+		}
+
 		return true;
 	}
 
@@ -208,7 +290,7 @@ void GameManager::PlayerShoot(PlayerCharacter* player)
 	if (player->last_shot + (1000.0 / player->getWeaponRPM()) > milli)
 		return;
 
-	if(player->bullet_count != 0)
+	if (player->bullet_count != 0)
 		player->bullet_count -= 1;
 	player->last_shot = milli;
 
@@ -257,7 +339,7 @@ void GameManager::PlayerShoot(PlayerCharacter* player)
 		player->setWeapon(0);
 	}
 
-	
+
 }
 
 Vec2 GameManager::SetItemCoord()
@@ -319,5 +401,5 @@ Vec2 GameManager::SetItemCoord()
 		Game::Curmap[coord.getY()][coord.getX()] = 3;
 		return coord;
 	}
-	
+
 }

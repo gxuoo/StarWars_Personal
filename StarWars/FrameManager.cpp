@@ -121,12 +121,12 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 		Print("◑");
 
 	SetCursorPosition({ (short)((objects[1])->GetCoord().getX() * 2), (short)(20 - (objects[1])->GetCoord().getY()) });
-	
+
 	if (((PlayerCharacter*)objects[1])->isFreeze == true)
 		SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 9);
 	else
 		SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 14);
-	
+
 	Print("□");
 
 	SetCursorPosition({ (short)((objects[1])->GetCoord().getX() * 2), (short)(20 - (objects[1])->GetCoord().getY() - 1) });
@@ -140,18 +140,18 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 	for (std::vector<Object*>::iterator it = objects.begin() + 2; it != objects.end(); ++it)
 	{
 		SetCursorPosition({ (short)((*it)->GetCoord().getX() * 2), (short)(20 - (*it)->GetCoord().getY()) });
-		
+
 		switch ((*it)->getObjectType())
 		{
 		case ObjectType::WALL:
 			Print("○");
 			break;
-		case ObjectType::PARTICLE :
+		case ObjectType::PARTICLE:
 			if (((Particle*)*it)->isMelee)
 			{
 				if (((Particle*)*it)->getDamage() <= 5)//fist
 				{
-					if((*it)->GetVelocity().getX() >= 0)
+					if ((*it)->GetVelocity().getX() >= 0)
 						Print(" @");
 					else
 						Print("@ ");
@@ -211,22 +211,51 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 					Print("─");
 			}
 			break;
-		case ObjectType::DROPPED_SPECIAL_ITEM : case ObjectType::DROPPED_WEAPON :
+		case ObjectType::DROPPED_SPECIAL_ITEM: case ObjectType::DROPPED_WEAPON:
 			Print("▣");
+			break;
+		case ObjectType::ENEMY_NPC:
+			COORD currentCursor = GetCursorPosition();
+
+			Print("[bd]");
+			SetCursorPosition({ currentCursor.X, (short)(currentCursor.Y - 1) });
+			Print("[pq]");
 			break;
 		}
 	}
 
-	drawStatus((Character*)objects[0], (Character*)objects[1]);
+	drawStatus((PlayerCharacter*)objects[0], (PlayerCharacter*)objects[1]);
+
+	if (objects[objects.size() - 1]->getObjectType() == ObjectType::ENEMY_NPC)
+	{
+		EnemyNPC* boss = ((EnemyNPC*)objects[objects.size() - 1]);
+		SetCursorPosition({ 30, 28 });
+		std::string str = std::to_string(boss->getHealth());
+		//std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getX()) + " " + std::to_string(((PlayerCharacter*)objects[0])->GetVelocity().getY());
+
+		SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 9);
+		for (int i = 0; i <= 50; i += 5)
+		{
+			if (boss->getHealth() >= i)
+			{
+				Print("■");
+			}
+			else
+			{
+				Print("□");
+			}
+		}
+		SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 15);
+	}
 }
 
-void FrameManager::drawStatus(Character* player1, Character* player2)
+void FrameManager::drawStatus(PlayerCharacter* player1, PlayerCharacter* player2)
 {
 	SetCursorPosition({ 1, 22 });
 	Print("플레이어 1");
 	SetCursorPosition({ 1, 23 });
 	Print("체력 : ");
-	for (int i = 0; i <= 100; i += 10) 
+	for (int i = 0; i <= 100; i += 10)
 	{
 		if (player1->getHealth() >= i)
 		{
@@ -246,8 +275,11 @@ void FrameManager::drawStatus(Character* player1, Character* player2)
 	SetCursorPosition({ 1, 26 });
 	Print("상태 : ");
 	Print(player1->getBuffName().c_str());
+	SetCursorPosition({ 1, 27 });
+	Print("목숨 : ");
+	Print(std::to_string(player1->life).c_str());
 
-	
+
 	SetCursorPosition({ 52, 22 });
 	Print("플레이어 2");
 	SetCursorPosition({ 52, 23 });
@@ -272,5 +304,8 @@ void FrameManager::drawStatus(Character* player1, Character* player2)
 	SetCursorPosition({ 52, 26 });
 	Print("상태 : ");
 	Print(player2->getBuffName().c_str());
-	
+	SetCursorPosition({ 52, 27 });
+	Print("목숨 : ");
+	Print(std::to_string(player2->life).c_str());
+
 }

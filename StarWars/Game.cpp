@@ -3,6 +3,9 @@
 Game::Game(bool gameOver) :gameOver(gameOver)
 {
 	this->objects = std::vector<Object*>();
+	
+	stageOver = false;
+	this->boss = nullptr;
 }
 
 bool Game::IsGameOver()
@@ -10,9 +13,19 @@ bool Game::IsGameOver()
 	return this->gameOver;
 }
 
+bool Game::IsStageOver()
+{
+	return this->stageOver;
+}
+
 void Game::SetGameOver(bool gameOver)
 {
 	this->gameOver = gameOver;
+}
+
+void Game::SetStageOver(bool stageOver)
+{
+	this->stageOver = stageOver;
 }
 
 std::vector<Object*>& Game::GetObjects()
@@ -69,6 +82,12 @@ void Game::UpdateObjects()
 
 		}
 
+		if (it->getObjectType() == ObjectType::ENEMY_NPC)
+		{
+			it->SetVelocity({ rand() % 3 - 1, rand() % 3 - 1 });
+			it->last_updated = milli;
+		}
+
 		UpdateObjectNextPosition(it);
 
 		if (it == objects[0] || it == objects[1])
@@ -122,6 +141,11 @@ void Game::UpdateObjects()
 					}
 
 				UpdateObjectNextPosition(it);
+				}
+
+				if (it->getObjectType() == ObjectType::ENEMY_NPC && it2->getObjectType() == ObjectType::WALL)
+				{
+					it->SetNextCoord(it->GetCoord());
 				}
 
 				if (it->IsCharacter() && it2->IsItem())
@@ -199,9 +223,16 @@ void Game::UpdateObjects()
 		}
 
 
-		if (it->getObjectType() == ObjectType::PLAYER_CHARACTER && ((Character *)it)->getHealth() <= 0)
+		if (it->getObjectType() == ObjectType::PLAYER_CHARACTER && ((Character*)it)->getHealth() <= 0)
+		{
+			//this->SetGameOver(true);
+			this->stageOver = true;
+		}
+
+		if (it->getObjectType() == ObjectType::PLAYER_CHARACTER && ((PlayerCharacter*)it)->life <= 0)
 		{
 			this->SetGameOver(true);
+			//this->stageOver = true;
 		}
 
 		UpdateObjectPosition();
@@ -221,6 +252,22 @@ void Game::UpdateObjects()
 		}
 	}
 }
+
+void Game::SetBoss(EnemyNPC* boss)
+{
+	this->boss = boss;
+}
+
+EnemyNPC* Game::GetBoss()
+{
+	return this->boss;
+}
+
+bool Game::IsBossExist()
+{
+	return this->boss == nullptr;
+}
+
 
 void Game::UpdateObjectPosition()
 {
@@ -275,7 +322,7 @@ bool Game::isOutOfMap(Object* obj)
 	}
 }
 
-const int Game::map[3][20][41] = {
+int Game::map[3][20][41] = {
 	{//≥≠¿Ãµµ 1
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, 
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, 
