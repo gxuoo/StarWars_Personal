@@ -159,9 +159,9 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 				else
 				{
 					if ((*it)->GetVelocity().getX() >= 0)
-						Print("\\\\");
+						Print("¡¬");
 					else
-						Print("//");
+						Print("£¯");
 				}
 				break;
 			}
