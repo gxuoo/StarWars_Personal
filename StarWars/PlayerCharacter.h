@@ -13,6 +13,7 @@ public:
 	int getJumpTimer();
 	int getJumpLimit();
 	bool is_mid_air;
+	int life;
 private:
 	int jump_timer;
 };
