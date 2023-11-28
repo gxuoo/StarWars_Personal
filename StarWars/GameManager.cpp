@@ -128,22 +128,14 @@ void GameManager::GetPlayerKeyInput()
 	{
 		player1->GetVelocity().setX(-1);
 		player1->direction.setX(-1);
-
-		if (player1->is_mid_air)
-			player1->direction.setY(1);
-		else
-			player1->direction.setY(0);
+		player1->direction.setY(0);
 	}
 
 	if (GetAsyncKeyState(0x44))
 	{
 		player1->GetVelocity().setX(1);
 		player1->direction.setX(1);
-
-		if (player1->is_mid_air)
-			player1->direction.setY(1);
-		else
-			player1->direction.setY(0);
+		player1->direction.setY(0);
 	}
 
 	else if (!GetAsyncKeyState(0x41) && !GetAsyncKeyState(0x44))
