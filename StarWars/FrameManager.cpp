@@ -179,12 +179,16 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 
 			if (((Particle*)*it)->isHatoken)
 			{
-				if ((*it)->GetVelocity().getX() == 0 && (*it)->GetVelocity().getY() != 0)
-					Print("¡Ò");
+				if ((*it)->GetVelocity().getX() == 0 && (*it)->GetVelocity().getY() >= 0)
+					Print("¡û");
+				else if ((*it)->GetVelocity().getX() == 0 && (*it)->GetVelocity().getY() < 0)
+				{
+					Print("¡ú");
+				}
 				else if ((*it)->GetVelocity().getX() >= 0)
-					Print(")");
+					Print("¡ù");
 				else
-					Print("(");
+					Print("¡ø");
 				break;
 			}
 
