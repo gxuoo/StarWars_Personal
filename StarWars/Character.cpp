@@ -10,7 +10,7 @@ Character::Character() : Object()
 	speed = 1;
 	object_type = ObjectType::CHARACTER;
 	size = { 1, 2 };
-	direction = 0;
+	direction = { 0, 0 };
 	bullet_count = 0;
 	last_shot = 0;
 	current_buff = 0;

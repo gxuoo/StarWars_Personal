@@ -27,7 +27,7 @@ public:
 	bool isWeaponShotgun();
 	bool isWeaponHatoken();
 	bool isFreeze = false;
-	int direction;
+	Vec2 direction;
 	int bullet_count;
 	long long last_shot;
 	int current_buff;

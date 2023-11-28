@@ -127,38 +127,56 @@ void GameManager::GetPlayerKeyInput()
 	if (GetAsyncKeyState(0x41))
 	{
 		player1->GetVelocity().setX(-1);
-		player1->direction = -1;
+		player1->direction.setX(-1);
+
+		if (player1->is_mid_air)
+			player1->direction.setY(1);
+		else
+			player1->direction.setY(0);
 	}
 
 	if (GetAsyncKeyState(0x44))
 	{
 		player1->GetVelocity().setX(1);
-		player1->direction = 1;
+		player1->direction.setX(1);
+
+		if (player1->is_mid_air)
+			player1->direction.setY(1);
+		else
+			player1->direction.setY(0);
 	}
 
 	else if (!GetAsyncKeyState(0x41) && !GetAsyncKeyState(0x44))
 		player1->GetVelocity().setX(0);
 
 	if (GetAsyncKeyState(0x47))
-		PlayerShoot(player1);
+	{
+		if (!player1->isFreeze)
+			PlayerShoot(player1);
+	}
 
 	if (GetAsyncKeyState(VK_LEFT))
 	{
 		player2->GetVelocity().setX(-1);
-		player2->direction = -1;
+		player2->direction.setX(-1);
+		player2->direction.setY(0);
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT))
 	{
 		player2->GetVelocity().setX(1);
-		player2->direction = 1;
+		player2->direction.setX(1);
+		player2->direction.setY(0);
 	}
 
 	else if (!GetAsyncKeyState(VK_LEFT) && !GetAsyncKeyState(VK_RIGHT))
 		player2->GetVelocity().setX(0);
 
 	if (GetAsyncKeyState(VK_NUMPAD5))
-		PlayerShoot(player2);
+	{
+		if (!player2->isFreeze)
+			PlayerShoot(player2);
+	}
 
 	if (GetAsyncKeyState(0x57))
 	{
@@ -166,6 +184,7 @@ void GameManager::GetPlayerKeyInput()
 		{
 			player1->setJumpTimer(0);
 			player1->GetVelocity().setY(1);
+			player1->direction.setY(1);
 		}
 	}
 
@@ -175,7 +194,18 @@ void GameManager::GetPlayerKeyInput()
 		{
 			player2->setJumpTimer(0);
 			player2->GetVelocity().setY(1);
+			player2->direction.setY(1);
 		}
+	}
+
+	if (GetAsyncKeyState(0x53))
+	{
+		player1->direction.setY(-1);
+	}
+
+	if (GetAsyncKeyState(VK_DOWN))
+	{
+		player2->direction.setY(-1);
 	}
 }
 
@@ -202,21 +232,30 @@ void GameManager::PlayerShoot(PlayerCharacter* player)
 		p->isShotgun = player->isWeaponShotgun();
 		p->isHatoken = player->isWeaponHatoken();
 
-		if (player->direction >= 0)
+		if (player->direction.getX() >= 0 && player->direction.getY() == 0)
 		{
 			p->SetCoord(player->GetCoord() + Vec2{ 1, i });
 			p->SetNextCoord(player->GetCoord() + Vec2{ 1, i });
 			p->SetVelocity(Vec2{ 1, 0 });
 		}
-
-		else
+		else if (player->direction.getX() < 0 && player->direction.getY() == 0)
 		{
 			p->SetCoord(player->GetCoord() + Vec2{ -1, i });
 			p->SetNextCoord(player->GetCoord() + Vec2{ -1, i });
 			p->SetVelocity(Vec2{ -1, 0 });
 		}
-
-		
+		else if (player->direction.getY() >= 0)
+		{
+			p->SetCoord(player->GetCoord() + Vec2{ i, 2 });
+			p->SetNextCoord(player->GetCoord() + Vec2{ i, 2 });
+			p->SetVelocity(Vec2{ 0, 1 });
+		}
+		else
+		{
+			p->SetCoord(player->GetCoord() + Vec2{ i, -1 });
+			p->SetNextCoord(player->GetCoord() + Vec2{ i, -1 });
+			p->SetVelocity(Vec2{ 0, -1 });
+		}
 
 		game->GetObjects().push_back(p);
 	}

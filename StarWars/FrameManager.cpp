@@ -115,9 +115,9 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 	Print("¡à");
 
 	SetCursorPosition({ (short)((objects[0])->GetCoord().getX() * 2), (short)(20 - (objects[0])->GetCoord().getY() - 1) });
-	if (((PlayerCharacter*)objects[0])->direction >= 0)
+	if (((PlayerCharacter*)objects[0])->direction.getX() >= 0)
 		Print("¢Ä");
-	else
+	else if (((PlayerCharacter*)objects[0])->direction.getX() < 0)
 		Print("¢Å");
 
 	SetCursorPosition({ (short)((objects[1])->GetCoord().getX() * 2), (short)(20 - (objects[1])->GetCoord().getY()) });
@@ -130,9 +130,9 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 	Print("¡à");
 
 	SetCursorPosition({ (short)((objects[1])->GetCoord().getX() * 2), (short)(20 - (objects[1])->GetCoord().getY() - 1) });
-	if (((PlayerCharacter*)objects[1])->direction >= 0)
+	if (((PlayerCharacter*)objects[1])->direction.getX() >= 0)
 		Print("¢Ä");
-	else
+	else if (((PlayerCharacter*)objects[1])->direction.getX() < 0)
 		Print("¢Å");
 
 	SetConsoleTextAttribute(this->frame.bufferHandler[this->frame.currentBufferIndex], 15);
@@ -159,9 +159,9 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 				else
 				{
 					if ((*it)->GetVelocity().getX() >= 0)
-						Print("\\\\");
+						Print("¡¬");
 					else
-						Print("//");
+						Print("£¯");
 				}
 				break;
 			}
@@ -179,10 +179,12 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 
 			if (((Particle*)*it)->isHatoken)
 			{
-				if ((*it)->GetVelocity().getX() >= 0)
-					Print("))");
+				if ((*it)->GetVelocity().getX() == 0 && (*it)->GetVelocity().getY() != 0)
+					Print("¡Ò");
+				else if ((*it)->GetVelocity().getX() >= 0)
+					Print(")");
 				else
-					Print("((");
+					Print("(");
 				break;
 			}
 
@@ -192,11 +194,17 @@ void FrameManager::MakeFrame(std::vector<Object*>& objects)
 			}
 			else if (((Particle*)*it)->getDamage() <= 10)
 			{
-				Print("£­");
+				if ((*it)->GetVelocity().getX() == 0 && (*it)->GetVelocity().getY() != 0)
+					Print("¤Ó");
+				else
+					Print("£­");
 			}
 			else
 			{
-				Print("¦¡");
+				if ((*it)->GetVelocity().getX() == 0 && (*it)->GetVelocity().getY() != 0)
+					Print("|");
+				else
+					Print("¦¡");
 			}
 			break;
 		case ObjectType::DROPPED_SPECIAL_ITEM : case ObjectType::DROPPED_WEAPON :
