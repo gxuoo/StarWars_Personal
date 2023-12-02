@@ -67,6 +67,15 @@ void Game::UpdateObjects()
 				player->current_buff = 0;
 			}
 
+			if (player->GetHitTimer() > 0)
+			{
+				player->SetHitTimer(player->GetHitTimer() - 1);
+			}
+			else
+			{
+				player->is_attacked = false;
+			}
+
 			if (player->isFreeze == true)
 			{
 				continue;
@@ -172,6 +181,11 @@ void Game::UpdateObjects()
 						it->SetDeleteObject(true);
 						should_delete = true;
 
+						if (((Particle*)it)->isBombing)
+						{
+							((Particle*)it)->setDamage(25);
+						}
+
 						((Wall*)it2)->giveDamage(((Particle*)it)->getDamage());
 						if (((Wall*)it2)->getHealth() <= 0)
 						{
@@ -183,10 +197,11 @@ void Game::UpdateObjects()
 						break;
 					}
 
-					if (it2->IsCharacter() && ((Particle *)it)->shooter != it2)
+					if (it2->IsCharacter() && (((Particle*)it)->shooter != it2))	//  || ((Particle*)it)->shooter == NULL)
 					{
 						(dynamic_cast<Character*>(it2))->giveDamage((dynamic_cast<Particle*>(it))->getDamage());
-
+						(dynamic_cast<Character*>(it2))->is_attacked = true;
+						(dynamic_cast<Character*>(it2))->SetHitTimer(1);
 						it->SetDeleteObject(true);
 						should_delete = true;
 

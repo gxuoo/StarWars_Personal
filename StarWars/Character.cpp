@@ -5,8 +5,10 @@ Character::Character() : Object()
 {
 	weapon_id = 0;
 	isFreeze = false;
+	is_attacked = false;
 	health = 100;
 	buff_timer = 0;
+	hit_timer = 0;
 	speed = 1;
 	object_type = ObjectType::CHARACTER;
 	size = { 1, 2 };
@@ -92,6 +94,16 @@ void Character::setBuffTimer(const int time)
 int Character::getBuffTimer() 
 {
 	return buff_timer;
+}
+
+void Character::SetHitTimer(const int time)
+{
+	hit_timer = time;
+}
+
+int Character::GetHitTimer()
+{
+	return hit_timer;
 }
 
 int Character::getHealth()

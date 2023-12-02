@@ -25,10 +25,10 @@ int DroppedWeapon::getDamage(int weapon_id)
 		return 8;
 		break;
 	case 3://sword
-		return 15;
+		return 7;
 		break;
 	case 4://shotgun
-		return 5;
+		return 15;
 		break;
 	case 5 ://sniper
 		return 20;
@@ -108,7 +108,7 @@ int DroppedWeapon::getRPM(int weapon_id)
 		return 10;
 		break;
 	case 3: //sword
-		return 5;
+		return 3;
 		break;
 	case 4://shotgun
 		return 2;

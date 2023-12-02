@@ -18,6 +18,8 @@ public:
 	int getWeapon();
 	void setBuffTimer(const int t);
 	int getBuffTimer();
+	void SetHitTimer(const int t);
+	int GetHitTimer();
 	int getHealth();
 	int getWeaponSpeed();
 	int getWeaponDamage();
@@ -27,6 +29,7 @@ public:
 	bool isWeaponShotgun();
 	bool isWeaponHatoken();
 	bool isFreeze = false;
+	bool is_attacked = false;
 	Vec2 direction;
 	int bullet_count;
 	long long last_shot;
@@ -38,6 +41,7 @@ protected:
 	int health;
 	int weapon_id;
 	int buff_timer;
+	int hit_timer;
 };
 
 #endif

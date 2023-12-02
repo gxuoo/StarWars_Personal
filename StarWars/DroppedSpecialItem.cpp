@@ -41,8 +41,8 @@ void DroppedSpecialItem::useItem(Object* itemuser, Object* elseuser, vector< Obj
 		{
 			Particle* p = new Particle();
 			p->isBombing = true;
-
-			p->SetSpeed(1);
+			
+			p->SetSpeed(5);
 			p->setDamage(5);
 			p->max_range = 50;
 			p->SetCoord({ dist(gen), 19});
@@ -57,12 +57,42 @@ void DroppedSpecialItem::useItem(Object* itemuser, Object* elseuser, vector< Obj
 			Particle* p = new Particle();
 			p->isBombing = true;
 
-			p->SetSpeed(1);
+			p->SetSpeed(5);
 			p->setDamage(5);
 			p->max_range = 50;
 			p->SetCoord({ dist(gen) + 20, 19 });
 			p->SetNextCoord(p->GetCoord() + Vec2{ -1, -1 });
 			p->SetVelocity(Vec2{ -1, -1 });
+
+			objects.push_back(p);
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			Particle* p = new Particle();
+			p->isBombing = true;
+
+			p->SetSpeed(5);
+			p->setDamage(5);
+			p->max_range = 50;
+			p->SetCoord({ dist(gen), 19 });
+			p->SetNextCoord(p->GetCoord() + Vec2{ 0, -1 });
+			p->SetVelocity(Vec2{ 0, -1 });
+
+			objects.push_back(p);
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			Particle* p = new Particle();
+			p->isBombing = true;
+
+			p->SetSpeed(5);
+			p->setDamage(5);
+			p->max_range = 50;
+			p->SetCoord({ dist(gen) + 20, 19 });
+			p->SetNextCoord(p->GetCoord() + Vec2{ 0, -1 });
+			p->SetVelocity(Vec2{ 0, -1 });
 
 			objects.push_back(p);
 		}
